@@ -1,0 +1,13 @@
+apiVersion: uptime-robot.clevyr.com/v1
+kind: Monitor
+metadata:
+  labels:
+    app.kubernetes.io/name: uptime-robot-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: example
+spec:
+  prune: true
+  monitor:
+    friendlyName: Example
+    url: https://example.com
+    interval: 5m

@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- uptime-robot_v1_monitor.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples

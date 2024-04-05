@@ -7,4 +7,14 @@ layout:
 - go.kubebuilder.io/v4
 projectName: uptime-robot-operator
 repo: github.com/clevyr/uptime-robot-operator
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: clevyr.com
+  group: uptime-robot
+  kind: Monitor
+  path: github.com/clevyr/uptime-robot-operator/api/v1
+  version: v1
 version: "3"

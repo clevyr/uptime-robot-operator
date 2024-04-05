@@ -1,0 +1,27 @@
+# permissions for end users to view monitors.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: monitor-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: uptime-robot-operator
+    app.kubernetes.io/part-of: uptime-robot-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: monitor-viewer-role
+rules:
+- apiGroups:
+  - uptime-robot.clevyr.com
+  resources:
+  - monitors
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - uptime-robot.clevyr.com
+  resources:
+  - monitors/status
+  verbs:
+  - get
