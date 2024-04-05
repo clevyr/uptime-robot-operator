@@ -39,6 +39,10 @@ spec:
           spec:
             description: MonitorSpec defines the desired state of Monitor
             properties:
+              interval:
+                default: 24h
+                description: Interval defines the reconcile interval.
+                type: string
               monitor:
                 description: Monitor configures the Uptime Robot monitor.
                 properties:

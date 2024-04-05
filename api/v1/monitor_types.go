@@ -23,6 +23,10 @@ import (
 
 // MonitorSpec defines the desired state of Monitor
 type MonitorSpec struct {
+	// Interval defines the reconcile interval.
+	//+kubebuilder:default:="24h"
+	Interval metav1.Duration `json:"interval,omitempty"`
+
 	// Prune enables garbage collection.
 	//+kubebuilder:default:=true
 	Prune bool `json:"prune,omitempty"`

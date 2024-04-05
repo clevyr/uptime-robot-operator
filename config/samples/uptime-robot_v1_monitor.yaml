@@ -6,6 +6,7 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: example
 spec:
+  interval: 24h
   prune: true
   monitor:
     friendlyName: Example

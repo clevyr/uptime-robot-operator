@@ -116,7 +116,7 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		}
 	}
 
-	return ctrl.Result{}, nil
+	return ctrl.Result{RequeueAfter: monitor.Spec.Interval.Duration}, nil
 }
 
 // SetupWithManager sets up the controller with the Manager.
