@@ -95,7 +95,11 @@ var (
 	ErrMultipleDefaultContact = errors.New("more than 1 default contact found")
 )
 
-func GetDefaultContact(ctx context.Context, c client.Client, contact *uptimerobotv1.Contact) error {
+func GetContact(ctx context.Context, c client.Client, contact *uptimerobotv1.Contact, name string) error {
+	if name != "" {
+		return c.Get(ctx, client.ObjectKey{Name: name}, contact)
+	}
+
 	list := &uptimerobotv1.ContactList{}
 	err := c.List(ctx, list, &client.ListOptions{
 		FieldSelector: fields.OneTermEqualSelector("spec.isDefault", "true"),

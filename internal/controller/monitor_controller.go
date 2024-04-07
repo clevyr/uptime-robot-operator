@@ -93,14 +93,8 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	for _, ref := range monitor.Spec.Contacts {
 		contact := &uptimerobotv1.Contact{}
 
-		if ref.Name == "" {
-			if err := GetDefaultContact(ctx, r.Client, contact); err != nil {
-				return ctrl.Result{}, err
-			}
-		} else {
-			if err := r.Client.Get(ctx, client.ObjectKey{Name: ref.Name}, contact); err != nil {
-				return ctrl.Result{}, err
-			}
+		if err := GetContact(ctx, r.Client, contact, ref.Name); err != nil {
+			return ctrl.Result{}, err
 		}
 
 		if contact.Status.ID == "" {
