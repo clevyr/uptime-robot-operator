@@ -59,6 +59,15 @@ func (c Client) Do(ctx context.Context, endpoint string, form url.Values) (*http
 	return res, nil
 }
 
+func (c Client) MonitorValues(monitor Monitor, form url.Values, contacts MonitorContacts) url.Values {
+	form.Set("friendly_name", monitor.FriendlyName)
+	form.Set("url", monitor.URL)
+	form.Set("type", strconv.Itoa(int(monitor.Type)))
+	form.Set("interval", strconv.Itoa(int(monitor.Interval.Seconds())))
+	form.Set("alert_contacts", contacts.String())
+	return form
+}
+
 type Response struct {
 	Status  Status          `json:"stat"`
 	Monitor ResponseMonitor `json:"monitor"`
@@ -74,12 +83,7 @@ var (
 )
 
 func (c Client) CreateMonitor(ctx context.Context, monitor Monitor, contacts MonitorContacts) (string, error) {
-	form := c.NewValues()
-	form.Set("friendly_name", monitor.FriendlyName)
-	form.Set("url", monitor.URL)
-	form.Set("type", strconv.Itoa(int(monitor.Type)))
-	form.Set("interval", strconv.Itoa(int(monitor.Interval.Seconds())))
-	form.Set("alert_contacts", contacts.String())
+	form := c.MonitorValues(monitor, c.NewValues(), contacts)
 
 	res, err := c.Do(ctx, "newMonitor", form)
 	if err != nil {
@@ -132,13 +136,8 @@ func (c Client) DeleteMonitor(ctx context.Context, id string) error {
 }
 
 func (c Client) EditMonitor(ctx context.Context, id string, monitor Monitor, contacts MonitorContacts) (string, error) {
-	form := c.NewValues()
+	form := c.MonitorValues(monitor, c.NewValues(), contacts)
 	form.Set("id", id)
-	form.Set("friendly_name", monitor.FriendlyName)
-	form.Set("url", monitor.URL)
-	form.Set("type", strconv.Itoa(int(monitor.Type)))
-	form.Set("interval", strconv.Itoa(int(monitor.Interval.Seconds())))
-	form.Set("alert_contacts", contacts.String())
 
 	res, err := c.Do(ctx, "editMonitor", form)
 	if err != nil {
