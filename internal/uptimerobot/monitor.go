@@ -20,6 +20,10 @@ type Monitor struct {
 	//+kubebuilder:default:="60s"
 	Interval metav1.Duration `json:"interval,omitempty"`
 
+	// Status toggles pause status for the monitor. 0 is paused, 1 is running.
+	//+kubebuilder:default:=1
+	Status uint8 `json:"status,omitempty"`
+
 	// Timeout is the monitor timeout.
 	//+kubebuilder:default:="30s"
 	Timeout metav1.Duration `json:"timeout,omitempty"`

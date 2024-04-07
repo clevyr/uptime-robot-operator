@@ -107,6 +107,11 @@ spec:
                     default: 60s
                     description: Interval is the monitoring interval.
                     type: string
+                  status:
+                    default: 1
+                    description: Status toggles pause status for the monitor. 0 is
+                      paused, 1 is running.
+                    type: integer
                   timeout:
                     default: 30s
                     description: Timeout is the monitor timeout.
@@ -142,6 +147,8 @@ spec:
                 type: boolean
               id:
                 type: string
+              status:
+                type: integer
               type:
                 enum:
                 - HTTPS
@@ -157,4 +164,7 @@ spec:
     served: true
     storage: true
     subresources:
+      scale:
+        specReplicasPath: .spec.monitor.status
+        statusReplicasPath: .status.status
       status: {}

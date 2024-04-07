@@ -142,6 +142,7 @@ func (c Client) DeleteMonitor(ctx context.Context, id string) error {
 func (c Client) EditMonitor(ctx context.Context, id string, monitor Monitor, contacts MonitorContacts) (string, error) {
 	form := c.MonitorValues(monitor, c.NewValues(), contacts)
 	form.Set("id", id)
+	form.Set("status", strconv.Itoa(int(monitor.Status)))
 
 	res, err := c.Do(ctx, "editMonitor", form)
 	if err != nil {

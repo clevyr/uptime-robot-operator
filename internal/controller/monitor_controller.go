@@ -21,6 +21,7 @@ import (
 	"errors"
 
 	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot"
+	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot/urtypes"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -119,8 +120,15 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		monitor.Status.Created = true
 		monitor.Status.ID = id
 		monitor.Status.Type = monitor.Spec.Monitor.Type
+		monitor.Status.Status = monitor.Spec.Monitor.Status
 		if err := r.Status().Update(ctx, monitor); err != nil {
 			return ctrl.Result{}, err
+		}
+
+		if monitor.Spec.Monitor.Status == urtypes.MonitorPaused {
+			if _, err := urclient.EditMonitor(ctx, id, monitor.Spec.Monitor, contacts); err != nil {
+				return ctrl.Result{}, err
+			}
 		}
 	} else {
 		id, err := urclient.EditMonitor(ctx, monitor.Status.ID, monitor.Spec.Monitor, contacts)
@@ -128,9 +136,8 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 			return ctrl.Result{}, err
 		}
 
-		if id != monitor.Status.ID {
-			monitor.Status.ID = id
-		}
+		monitor.Status.ID = id
+		monitor.Status.Status = monitor.Spec.Monitor.Status
 		if err := r.Status().Update(ctx, monitor); err != nil {
 			return ctrl.Result{}, err
 		}

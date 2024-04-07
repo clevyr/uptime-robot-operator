@@ -52,10 +52,12 @@ type MonitorStatus struct {
 	Created bool                `json:"created"`
 	ID      string              `json:"id,omitempty"`
 	Type    urtypes.MonitorType `json:"type,omitempty"`
+	Status  uint8               `json:"status,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:subresource:scale:specpath=.spec.monitor.status,statuspath=.status.status
 //+kubebuilder:printcolumn:name="Created",type="boolean",JSONPath=".status.created"
 //+kubebuilder:printcolumn:name="Friendly Name",type="string",priority=1,JSONPath=".spec.monitor.friendlyName"
 //+kubebuilder:printcolumn:name="URL",type="string",priority=1,JSONPath=".spec.monitor.url"
