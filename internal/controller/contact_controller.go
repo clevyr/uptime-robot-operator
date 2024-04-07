@@ -63,7 +63,7 @@ func (r *ContactReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 			return ctrl.Result{}, err
 		}
 
-		contact.Status.Created = true
+		contact.Status.Ready = true
 		contact.Status.ID = id
 		if err := r.Status().Update(ctx, contact); err != nil {
 			return ctrl.Result{}, err

@@ -63,7 +63,7 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	if !monitor.DeletionTimestamp.IsZero() {
 		// Object is being deleted
 		if controllerutil.ContainsFinalizer(monitor, myFinalizerName) {
-			if monitor.Spec.Prune && monitor.Status.Created {
+			if monitor.Spec.Prune && monitor.Status.Ready {
 				urclient := uptimerobot.NewClient()
 				if err := urclient.DeleteMonitor(ctx, monitor.Status.ID); err != nil {
 					return ctrl.Result{}, err
@@ -81,12 +81,12 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 
 	urclient := uptimerobot.NewClient()
 
-	if monitor.Status.Created && monitor.Status.Type != monitor.Spec.Monitor.Type {
+	if monitor.Status.Ready && monitor.Status.Type != monitor.Spec.Monitor.Type {
 		// Type change requires recreate
 		if err := urclient.DeleteMonitor(ctx, monitor.Status.ID); err != nil {
 			return ctrl.Result{}, err
 		}
-		monitor.Status.Created = false
+		monitor.Status.Ready = false
 	}
 
 	contacts := make([]uptimerobot.MonitorContact, 0, len(monitor.Spec.Contacts))
@@ -107,13 +107,13 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		})
 	}
 
-	if !monitor.Status.Created {
+	if !monitor.Status.Ready {
 		id, err := urclient.CreateMonitor(ctx, monitor.Spec.Monitor, contacts)
 		if err != nil {
 			return ctrl.Result{}, err
 		}
 
-		monitor.Status.Created = true
+		monitor.Status.Ready = true
 		monitor.Status.ID = id
 		monitor.Status.Type = monitor.Spec.Monitor.Type
 		monitor.Status.Status = monitor.Spec.Monitor.Status

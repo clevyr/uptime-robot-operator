@@ -15,8 +15,8 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.created
-      name: Created
+    - jsonPath: .status.ready
+      name: Ready
       type: boolean
     - jsonPath: .spec.monitor.friendlyName
       name: Friendly Name
@@ -143,10 +143,10 @@ spec:
           status:
             description: MonitorStatus defines the observed state of Monitor
             properties:
-              created:
-                type: boolean
               id:
                 type: string
+              ready:
+                type: boolean
               status:
                 type: integer
               type:
@@ -158,7 +158,7 @@ spec:
                 - Heartbeat
                 type: string
             required:
-            - created
+            - ready
             type: object
         type: object
     served: true

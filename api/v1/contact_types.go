@@ -32,14 +32,14 @@ type ContactSpec struct {
 
 // ContactStatus defines the observed state of Contact
 type ContactStatus struct {
-	Created bool   `json:"created"`
-	ID      string `json:"id,omitempty"`
+	Ready bool   `json:"ready"`
+	ID    string `json:"id,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 //+kubebuilder:resource:scope=Cluster
-//+kubebuilder:printcolumn:name="Created",type="boolean",JSONPath=".status.created"
+//+kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.ready"
 //+kubebuilder:printcolumn:name="Default",type="boolean",JSONPath=".spec.isDefault"
 //+kubebuilder:printcolumn:name="Friendly Name",type="string",priority=1,JSONPath=".spec.contact.friendlyName"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
