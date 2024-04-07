@@ -64,6 +64,7 @@ func (c Client) MonitorValues(monitor Monitor, form url.Values, contacts Monitor
 	form.Set("url", monitor.URL)
 	form.Set("type", strconv.Itoa(int(monitor.Type)))
 	form.Set("interval", strconv.Itoa(int(monitor.Interval.Seconds())))
+	form.Set("timeout", strconv.Itoa(int(monitor.Timeout.Seconds())))
 	form.Set("alert_contacts", contacts.String())
 	return form
 }

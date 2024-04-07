@@ -95,6 +95,10 @@ spec:
                     default: 60s
                     description: Interval is the monitoring interval.
                     type: string
+                  timeout:
+                    default: 30s
+                    description: Timeout is the monitor timeout.
+                    type: string
                   type:
                     default: HTTPS
                     description: Type chooses the monitor type.

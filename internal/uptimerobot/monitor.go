@@ -18,4 +18,8 @@ type Monitor struct {
 	// Interval is the monitoring interval.
 	//+kubebuilder:default:="60s"
 	Interval metav1.Duration `json:"interval,omitempty"`
+
+	// Timeout is the monitor timeout.
+	//+kubebuilder:default:="30s"
+	Timeout metav1.Duration `json:"timeout,omitempty"`
 }
