@@ -14,7 +14,22 @@ spec:
     singular: monitor
   scope: Namespaced
   versions:
-  - name: v1
+  - additionalPrinterColumns:
+    - jsonPath: .status.created
+      name: Created
+      type: boolean
+    - jsonPath: .spec.monitor.friendlyName
+      name: Friendly Name
+      priority: 1
+      type: string
+    - jsonPath: .spec.monitor.url
+      name: URL
+      priority: 1
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1
     schema:
       openAPIV3Schema:
         description: Monitor is the Schema for the monitors API

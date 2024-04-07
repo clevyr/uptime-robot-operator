@@ -44,6 +44,10 @@ type MonitorStatus struct {
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:printcolumn:name="Created",type="boolean",JSONPath=".status.created"
+//+kubebuilder:printcolumn:name="Friendly Name",type="string",priority=1,JSONPath=".spec.monitor.friendlyName"
+//+kubebuilder:printcolumn:name="URL",type="string",priority=1,JSONPath=".spec.monitor.url"
+//+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // Monitor is the Schema for the monitors API
 type Monitor struct {
