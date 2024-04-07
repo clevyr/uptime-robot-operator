@@ -18,6 +18,7 @@ package v1
 
 import (
 	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot"
+	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot/urtypes"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -48,9 +49,9 @@ type MonitorSpec struct {
 
 // MonitorStatus defines the observed state of Monitor
 type MonitorStatus struct {
-	Created bool                    `json:"created"`
-	ID      string                  `json:"id,omitempty"`
-	Type    uptimerobot.MonitorType `json:"type,omitempty"`
+	Created bool                `json:"created"`
+	ID      string              `json:"id,omitempty"`
+	Type    urtypes.MonitorType `json:"type,omitempty"`
 }
 
 //+kubebuilder:object:root=true

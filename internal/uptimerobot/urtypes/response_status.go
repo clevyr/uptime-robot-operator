@@ -1,4 +1,4 @@
-package uptimerobot
+package urtypes
 
 type Status string
 

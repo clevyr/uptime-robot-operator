@@ -11,6 +11,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot/urtypes"
 )
 
 func NewClient() Client {
@@ -66,11 +68,12 @@ func (c Client) MonitorValues(monitor Monitor, form url.Values, contacts Monitor
 	form.Set("interval", strconv.Itoa(int(monitor.Interval.Seconds())))
 	form.Set("timeout", strconv.Itoa(int(monitor.Timeout.Seconds())))
 	form.Set("alert_contacts", contacts.String())
+	form.Set("http_method", strconv.Itoa(int(monitor.HTTPMethod)))
 	return form
 }
 
 type Response struct {
-	Status  Status          `json:"stat"`
+	Status  urtypes.Status  `json:"stat"`
 	Monitor ResponseMonitor `json:"monitor"`
 }
 
@@ -99,7 +102,7 @@ func (c Client) CreateMonitor(ctx context.Context, monitor Monitor, contacts Mon
 		return "", err
 	}
 
-	if parsed.Status != StatusOK {
+	if parsed.Status != urtypes.StatusOK {
 		if id, err := c.FindMonitorID(ctx, FindByURL(monitor)); err == nil {
 			// Monitor already exists
 			return id, nil
@@ -126,7 +129,7 @@ func (c Client) DeleteMonitor(ctx context.Context, id string) error {
 		return err
 	}
 
-	if parsed.Status != StatusOK {
+	if parsed.Status != urtypes.StatusOK {
 		if _, err := c.FindMonitorID(ctx, FindByID(id)); err != nil && errors.Is(err, ErrMonitorNotFound) {
 			// Monitor already deleted
 			return nil
@@ -153,7 +156,7 @@ func (c Client) EditMonitor(ctx context.Context, id string, monitor Monitor, con
 		return "", err
 	}
 
-	if parsed.Status != StatusOK {
+	if parsed.Status != urtypes.StatusOK {
 		if _, err := c.FindMonitorID(ctx, FindByID(id)); err != nil && errors.Is(err, ErrMonitorNotFound) {
 			// Recreate deleted monitor
 			return c.CreateMonitor(ctx, monitor, contacts)
@@ -164,7 +167,7 @@ func (c Client) EditMonitor(ctx context.Context, id string, monitor Monitor, con
 }
 
 type FindMonitorResponse struct {
-	Status   Status            `json:"stat"`
+	Status   urtypes.Status    `json:"stat"`
 	Monitors []ResponseMonitor `json:"monitors"`
 }
 
@@ -189,7 +192,7 @@ func (c Client) FindMonitorID(ctx context.Context, opts ...FindOpt) (string, err
 		return "", err
 	}
 
-	if parsed.Status != StatusOK {
+	if parsed.Status != urtypes.StatusOK {
 		return "", ErrResponse
 	}
 
@@ -200,7 +203,7 @@ func (c Client) FindMonitorID(ctx context.Context, opts ...FindOpt) (string, err
 }
 
 type FindContactResponse struct {
-	Status   Status            `json:"stat"`
+	Status   urtypes.Status    `json:"stat"`
 	Contacts []ResponseContact `json:"alert_contacts"`
 }
 
@@ -226,7 +229,7 @@ func (c Client) FindContactID(ctx context.Context, friendlyName string) (string,
 		return "", err
 	}
 
-	if parsed.Status != StatusOK {
+	if parsed.Status != urtypes.StatusOK {
 		return "", ErrResponse
 	}
 

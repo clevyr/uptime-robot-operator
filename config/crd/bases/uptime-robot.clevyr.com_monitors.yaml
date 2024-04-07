@@ -91,6 +91,18 @@ spec:
                     description: FriendlyName sets the name that is shown in Uptime
                       Robot.
                     type: string
+                  httpMethod:
+                    default: GET
+                    description: HTTPMethod defines the HTTP verb to use.
+                    enum:
+                    - HEAD
+                    - GET
+                    - POST
+                    - PUT
+                    - PATCH
+                    - DELETE
+                    - OPTIONS
+                    type: string
                   interval:
                     default: 60s
                     description: Interval is the monitoring interval.

@@ -1,4 +1,4 @@
-package uptimerobot
+package urtypes
 
 //go:generate enumer -type MonitorType -json -trimprefix Type
 

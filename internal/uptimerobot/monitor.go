@@ -1,6 +1,7 @@
 package uptimerobot
 
 import (
+	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot/urtypes"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -13,7 +14,7 @@ type Monitor struct {
 
 	// Type chooses the monitor type.
 	//+kubebuilder:default:=HTTPS
-	Type MonitorType `json:"type,omitempty"`
+	Type urtypes.MonitorType `json:"type,omitempty"`
 
 	// Interval is the monitoring interval.
 	//+kubebuilder:default:="60s"
@@ -22,4 +23,8 @@ type Monitor struct {
 	// Timeout is the monitor timeout.
 	//+kubebuilder:default:="30s"
 	Timeout metav1.Duration `json:"timeout,omitempty"`
+
+	// HTTPMethod defines the HTTP verb to use.
+	//+kubebuilder:default:="GET"
+	HTTPMethod urtypes.HTTPMethod `json:"httpMethod,omitempty"`
 }
