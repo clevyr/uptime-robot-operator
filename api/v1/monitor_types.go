@@ -40,6 +40,9 @@ type MonitorSpec struct {
 	//+kubebuilder:default:=true
 	Prune bool `json:"prune,omitempty"`
 
+	// Account references this object's Account. If not specified, the default will be used.
+	Account corev1.LocalObjectReference `json:"account,omitempty"`
+
 	// Monitor configures the Uptime Robot monitor.
 	Monitor uptimerobot.Monitor `json:"monitor"`
 

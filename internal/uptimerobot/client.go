@@ -8,15 +8,14 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"os"
 	"strconv"
 	"strings"
 
 	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot/urtypes"
 )
 
-func NewClient() Client {
-	return Client{apiKey: os.Getenv("UPTIME_ROBOT_API_KEY")}
+func NewClient(apiKey string) Client {
+	return Client{apiKey: apiKey}
 }
 
 type Client struct {
@@ -240,4 +239,29 @@ func (c Client) FindContactID(ctx context.Context, friendlyName string) (string,
 		}
 	}
 	return "", ErrContactNotFound
+}
+
+type AcountDetailsResponse struct {
+	Status urtypes.Status `json:"stat"`
+}
+
+func (c Client) GetAccountDetails(ctx context.Context) error {
+	form := c.NewValues()
+	res, err := c.Do(ctx, "getAccountDetails", form)
+	if err != nil {
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(res.Body)
+
+	parsed := &AcountDetailsResponse{}
+	if err := json.NewDecoder(res.Body).Decode(&parsed); err != nil {
+		return err
+	}
+
+	if parsed.Status != urtypes.StatusOK {
+		return ErrResponse
+	}
+	return nil
 }

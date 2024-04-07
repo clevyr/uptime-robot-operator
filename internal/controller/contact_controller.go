@@ -55,7 +55,12 @@ func (r *ContactReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	urclient := uptimerobot.NewClient()
+	apiKey, err := GetApiKey(ctx, r.Client, nil, contact.Spec.Account.Name)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+
+	urclient := uptimerobot.NewClient(apiKey)
 
 	if contact.Status.ID == "" {
 		id, err := urclient.FindContactID(ctx, contact.Spec.Contact.FriendlyName)

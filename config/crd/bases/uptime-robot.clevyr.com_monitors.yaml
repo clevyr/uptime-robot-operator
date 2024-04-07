@@ -54,6 +54,18 @@ spec:
           spec:
             description: MonitorSpec defines the desired state of Monitor
             properties:
+              account:
+                description: Account references this object's Account. If not specified,
+                  the default will be used.
+                properties:
+                  name:
+                    description: |-
+                      Name of the referent.
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
               contacts:
                 default:
                 - {}

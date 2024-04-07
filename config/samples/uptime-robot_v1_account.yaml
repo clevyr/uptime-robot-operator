@@ -1,0 +1,12 @@
+apiVersion: uptime-robot.clevyr.com/v1
+kind: Account
+metadata:
+  labels:
+    app.kubernetes.io/name: uptime-robot-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: example
+spec:
+  isDefault: true
+  apiKeySecretRef:
+    name: uptime-robot-example
+    key: apiKey

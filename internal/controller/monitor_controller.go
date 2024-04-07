@@ -58,13 +58,18 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
+	apiKey, err := GetApiKey(ctx, r.Client, nil, monitor.Spec.Account.Name)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+	urclient := uptimerobot.NewClient(apiKey)
+
 	myFinalizerName := "uptime-robot.clevyr.com/finalizer"
 
 	if !monitor.DeletionTimestamp.IsZero() {
 		// Object is being deleted
 		if controllerutil.ContainsFinalizer(monitor, myFinalizerName) {
 			if monitor.Spec.Prune && monitor.Status.Ready {
-				urclient := uptimerobot.NewClient()
 				if err := urclient.DeleteMonitor(ctx, monitor.Status.ID); err != nil {
 					return ctrl.Result{}, err
 				}
@@ -78,8 +83,6 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 
 		return ctrl.Result{}, nil
 	}
-
-	urclient := uptimerobot.NewClient()
 
 	if monitor.Status.Ready && monitor.Status.Type != monitor.Spec.Monitor.Type {
 		// Type change requires recreate
