@@ -54,6 +54,32 @@ spec:
           spec:
             description: MonitorSpec defines the desired state of Monitor
             properties:
+              contacts:
+                default:
+                - {}
+                items:
+                  description: MonitorContactRef attaches alert contacts. If blank,
+                    the default will be used.
+                  properties:
+                    name:
+                      description: |-
+                        Name of the referent.
+                        More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                        TODO: Add other useful fields. apiVersion, kind, uid?
+                      type: string
+                    recurrence:
+                      description: |-
+                        Recurrence defines the number of minutes between a repeat notification.
+                        A value of 0, disables repeat notifications.
+                      type: string
+                    threshold:
+                      default: 1m
+                      description: Threshold defines the number of minutes to wait
+                        to notify.
+                      type: string
+                  type: object
+                  x-kubernetes-map-type: atomic
+                type: array
               interval:
                 default: 24h
                 description: Interval defines the reconcile interval.

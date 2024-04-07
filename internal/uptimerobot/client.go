@@ -73,12 +73,13 @@ var (
 	ErrResponse = errors.New("received fail from Uptime Robot API")
 )
 
-func (c Client) CreateMonitor(ctx context.Context, monitor Monitor) (string, error) {
+func (c Client) CreateMonitor(ctx context.Context, monitor Monitor, contacts MonitorContacts) (string, error) {
 	form := c.NewValues()
 	form.Set("friendly_name", monitor.FriendlyName)
 	form.Set("url", monitor.URL)
 	form.Set("type", strconv.Itoa(int(monitor.Type)))
 	form.Set("interval", strconv.Itoa(int(monitor.Interval.Seconds())))
+	form.Set("alert_contacts", contacts.String())
 
 	res, err := c.Do(ctx, "newMonitor", form)
 	if err != nil {
@@ -130,13 +131,14 @@ func (c Client) DeleteMonitor(ctx context.Context, id string) error {
 	return nil
 }
 
-func (c Client) EditMonitor(ctx context.Context, id string, monitor Monitor) (string, error) {
+func (c Client) EditMonitor(ctx context.Context, id string, monitor Monitor, contacts MonitorContacts) (string, error) {
 	form := c.NewValues()
 	form.Set("id", id)
 	form.Set("friendly_name", monitor.FriendlyName)
 	form.Set("url", monitor.URL)
 	form.Set("type", strconv.Itoa(int(monitor.Type)))
 	form.Set("interval", strconv.Itoa(int(monitor.Interval.Seconds())))
+	form.Set("alert_contacts", contacts.String())
 
 	res, err := c.Do(ctx, "editMonitor", form)
 	if err != nil {
@@ -154,14 +156,14 @@ func (c Client) EditMonitor(ctx context.Context, id string, monitor Monitor) (st
 	if parsed.Status != StatusOK {
 		if _, err := c.FindMonitorID(ctx, FindByID(id)); err != nil && errors.Is(err, ErrMonitorNotFound) {
 			// Recreate deleted monitor
-			return c.CreateMonitor(ctx, monitor)
+			return c.CreateMonitor(ctx, monitor, contacts)
 		}
 		return parsed.Monitor.ID.String(), ErrResponse
 	}
 	return parsed.Monitor.ID.String(), nil
 }
 
-type FindResponse struct {
+type FindMonitorResponse struct {
 	Status   Status            `json:"stat"`
 	Monitors []ResponseMonitor `json:"monitors"`
 }
@@ -182,7 +184,7 @@ func (c Client) FindMonitorID(ctx context.Context, opts ...FindOpt) (string, err
 		_ = Body.Close()
 	}(res.Body)
 
-	parsed := &FindResponse{}
+	parsed := &FindMonitorResponse{}
 	if err := json.NewDecoder(res.Body).Decode(&parsed); err != nil {
 		return "", err
 	}
@@ -195,4 +197,43 @@ func (c Client) FindMonitorID(ctx context.Context, opts ...FindOpt) (string, err
 		return monitor.ID.String(), nil
 	}
 	return "", ErrMonitorNotFound
+}
+
+type FindContactResponse struct {
+	Status   Status            `json:"stat"`
+	Contacts []ResponseContact `json:"alert_contacts"`
+}
+
+type ResponseContact struct {
+	ID           string `json:"id"`
+	FriendlyName string `json:"friendly_name"`
+}
+
+var ErrContactNotFound = errors.New("contact not found")
+
+func (c Client) FindContactID(ctx context.Context, friendlyName string) (string, error) {
+	form := c.NewValues()
+	res, err := c.Do(ctx, "getAlertContacts", form)
+	if err != nil {
+		return "", err
+	}
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(res.Body)
+
+	parsed := &FindContactResponse{}
+	if err := json.NewDecoder(res.Body).Decode(&parsed); err != nil {
+		return "", err
+	}
+
+	if parsed.Status != StatusOK {
+		return "", ErrResponse
+	}
+
+	for _, contact := range parsed.Contacts {
+		if friendlyName == contact.FriendlyName {
+			return contact.ID, nil
+		}
+	}
+	return "", ErrContactNotFound
 }

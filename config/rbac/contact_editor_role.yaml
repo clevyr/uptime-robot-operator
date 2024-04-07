@@ -1,0 +1,31 @@
+# permissions for end users to edit contacts.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: contact-editor-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: uptime-robot-operator
+    app.kubernetes.io/part-of: uptime-robot-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: contact-editor-role
+rules:
+- apiGroups:
+  - uptime-robot.clevyr.com
+  resources:
+  - contacts
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - uptime-robot.clevyr.com
+  resources:
+  - contacts/status
+  verbs:
+  - get

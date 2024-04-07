@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"errors"
 
 	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -34,6 +35,8 @@ type MonitorReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
+
+var ErrContactMissingID = errors.New("contact missing ID")
 
 //+kubebuilder:rbac:groups=uptime-robot.clevyr.com,resources=monitors,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=uptime-robot.clevyr.com,resources=monitors/status,verbs=get;update;patch
@@ -83,8 +86,32 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		monitor.Status.Created = false
 	}
 
+	contacts := make([]uptimerobot.MonitorContact, 0, len(monitor.Spec.Contacts))
+	for _, ref := range monitor.Spec.Contacts {
+		contact := &uptimerobotv1.Contact{}
+
+		if ref.Name == "" {
+			if err := GetDefaultContact(ctx, r.Client, contact); err != nil {
+				return ctrl.Result{}, err
+			}
+		} else {
+			if err := r.Client.Get(ctx, client.ObjectKey{Name: ref.Name}, contact); err != nil {
+				return ctrl.Result{}, err
+			}
+		}
+
+		if contact.Status.ID == "" {
+			return ctrl.Result{}, ErrContactMissingID
+		}
+
+		contacts = append(contacts, uptimerobot.MonitorContact{
+			ID:                   contact.Status.ID,
+			MonitorContactCommon: ref.MonitorContactCommon,
+		})
+	}
+
 	if !monitor.Status.Created {
-		id, err := urclient.CreateMonitor(ctx, monitor.Spec.Monitor)
+		id, err := urclient.CreateMonitor(ctx, monitor.Spec.Monitor, contacts)
 		if err != nil {
 			return ctrl.Result{}, err
 		}
@@ -96,7 +123,7 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 			return ctrl.Result{}, err
 		}
 	} else {
-		id, err := urclient.EditMonitor(ctx, monitor.Status.ID, monitor.Spec.Monitor)
+		id, err := urclient.EditMonitor(ctx, monitor.Status.ID, monitor.Spec.Monitor, contacts)
 		if err != nil {
 			return ctrl.Result{}, err
 		}

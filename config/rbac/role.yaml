@@ -7,6 +7,32 @@ rules:
 - apiGroups:
   - uptime-robot.clevyr.com
   resources:
+  - contacts
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - uptime-robot.clevyr.com
+  resources:
+  - contacts/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - uptime-robot.clevyr.com
+  resources:
+  - contacts/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - uptime-robot.clevyr.com
+  resources:
   - monitors
   verbs:
   - create

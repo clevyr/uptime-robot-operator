@@ -18,8 +18,16 @@ package v1
 
 import (
 	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
+
+// MonitorContactRef attaches alert contacts. If blank, the default will be used.
+type MonitorContactRef struct {
+	corev1.LocalObjectReference `json:",inline"`
+
+	uptimerobot.MonitorContactCommon `json:",inline"`
+}
 
 // MonitorSpec defines the desired state of Monitor
 type MonitorSpec struct {
@@ -33,6 +41,9 @@ type MonitorSpec struct {
 
 	// Monitor configures the Uptime Robot monitor.
 	Monitor uptimerobot.Monitor `json:"monitor"`
+
+	// +kubebuilder:default:={{}}
+	Contacts []MonitorContactRef `json:"contacts,omitempty"`
 }
 
 // MonitorStatus defines the observed state of Monitor
