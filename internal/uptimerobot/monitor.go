@@ -12,7 +12,7 @@ type Monitor struct {
 	URL string `json:"url"`
 
 	// Type chooses the monitor type.
-	//+kubebuilder:default:=https
+	//+kubebuilder:default:=HTTPS
 	Type MonitorType `json:"type,omitempty"`
 
 	// Interval is the monitoring interval.

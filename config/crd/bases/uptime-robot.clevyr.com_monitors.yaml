@@ -96,14 +96,14 @@ spec:
                     description: Interval is the monitoring interval.
                     type: string
                   type:
-                    default: https
+                    default: HTTPS
                     description: Type chooses the monitor type.
                     enum:
-                    - https
-                    - keyword
-                    - ping
-                    - port
-                    - heartbeat
+                    - HTTPS
+                    - Keyword
+                    - Ping
+                    - Port
+                    - Heartbeat
                     type: string
                   url:
                     description: URL is the URL or IP to monitor, including the scheme.
@@ -128,11 +128,11 @@ spec:
                 type: string
               type:
                 enum:
-                - https
-                - keyword
-                - ping
-                - port
-                - heartbeat
+                - HTTPS
+                - Keyword
+                - Ping
+                - Port
+                - Heartbeat
                 type: string
             required:
             - created

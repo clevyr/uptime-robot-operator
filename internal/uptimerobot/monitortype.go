@@ -1,9 +1,9 @@
 package uptimerobot
 
-//go:generate enumer -type MonitorType -json -trimprefix Type -transform lower
+//go:generate enumer -type MonitorType -json -trimprefix Type
 
 //+kubebuilder:validation:Type:=string
-//+kubebuilder:validation:Enum:=https;keyword;ping;port;heartbeat
+//+kubebuilder:validation:Enum:=HTTPS;Keyword;Ping;Port;Heartbeat
 
 type MonitorType uint8
 
