@@ -34,7 +34,7 @@ import (
 	uptimerobotv1 "github.com/clevyr/uptime-robot-operator/api/v1"
 )
 
-var ClusterResourceNamespace string
+var ClusterResourceNamespace = "uptime-robot-operator-system"
 
 // AccountReconciler reconciles a Account object
 type AccountReconciler struct {
