@@ -1,8 +1,9 @@
-# uptime-robot-operator
-// TODO(user): Add simple overview of use/purpose
+# Uptime Robot Operator
+
+Kubernetes operator to manage Uptime Robot monitors.
 
 ## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+This operator allows a Kubernetes cluster to create, edit, and delete monitors in Uptime Robot. Monitors managed by this tool will also be reconciled regularly to prevent configuration drift.
 
 ## Getting Started
 
@@ -39,7 +40,7 @@ make deploy IMG=<some-registry>/uptime-robot-operator:tag
 privileges or be logged in as admin.
 
 **Create instances of your solution**
-You can apply the samples (examples) from the config/sample:
+You can apply the [samples (examples)](config/samples) from the config/sample:
 
 ```sh
 kubectl apply -k config/samples/
@@ -111,4 +112,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
