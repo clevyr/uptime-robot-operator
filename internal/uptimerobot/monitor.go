@@ -7,6 +7,7 @@ import (
 
 //+kubebuilder:object:generate=true
 //+kubebuilder:validation:XValidation:rule="self.type != 'Keyword' || has(self.keyword)", message="Keyword config is required if type is Keyword"
+//+kubebuilder:validation:XValidation:rule="self.type != 'Port' || has(self.port)", message="Port config is required if type is Port"
 
 type Monitor struct {
 	// FriendlyName sets the name that is shown in Uptime Robot.
@@ -37,6 +38,9 @@ type Monitor struct {
 
 	// Keyword provides configuration for the Keyword monitor type.
 	Keyword *MonitorKeyword `json:"keyword,omitempty"`
+
+	// Port provides configuration for the Port monitor type.
+	Port *MonitorPort `json:"port,omitempty"`
 }
 
 type MonitorKeyword struct {
@@ -46,4 +50,13 @@ type MonitorKeyword struct {
 	CaseSensitive bool `json:"caseSensitive,omitempty"`
 
 	Value string `json:"value"`
+}
+
+//+kubebuilder:validation:XValidation:rule="self.type != 'Custom' || has(self.number)", message="Number is required if type is Custom"
+//+kubebuilder:validation:XValidation:rule="self.type == 'Custom' || !has(self.number)", message="Type must be Custom if Number is set"
+
+type MonitorPort struct {
+	Type urtypes.PortType `json:"type"`
+
+	Number uint16 `json:"number,omitempty"`
 }

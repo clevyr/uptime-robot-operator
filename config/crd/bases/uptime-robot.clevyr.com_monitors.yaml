@@ -135,6 +135,29 @@ spec:
                     - type
                     - value
                     type: object
+                  port:
+                    description: Port provides configuration for the Port monitor
+                      type.
+                    properties:
+                      number:
+                        type: integer
+                      type:
+                        enum:
+                        - HTTP
+                        - FTP
+                        - SMTP
+                        - POP3
+                        - IMAP
+                        - Custom
+                        type: string
+                    required:
+                    - type
+                    type: object
+                    x-kubernetes-validations:
+                    - message: Number is required if type is Custom
+                      rule: self.type != 'Custom' || has(self.number)
+                    - message: Type must be Custom if Number is set
+                      rule: self.type == 'Custom' || !has(self.number)
                   status:
                     default: 1
                     description: Status toggles pause status for the monitor. 0 is
@@ -164,6 +187,8 @@ spec:
                 x-kubernetes-validations:
                 - message: Keyword config is required if type is Keyword
                   rule: self.type != 'Keyword' || has(self.keyword)
+                - message: Port config is required if type is Port
+                  rule: self.type != 'Port' || has(self.port)
               prune:
                 default: true
                 description: Prune enables garbage collection.
