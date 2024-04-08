@@ -23,7 +23,6 @@ spec:
       type: boolean
     - jsonPath: .spec.contact.friendlyName
       name: Friendly Name
-      priority: 1
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age

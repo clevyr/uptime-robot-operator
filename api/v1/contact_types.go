@@ -45,7 +45,7 @@ type ContactStatus struct {
 //+kubebuilder:resource:scope=Cluster
 //+kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.ready"
 //+kubebuilder:printcolumn:name="Default",type="boolean",JSONPath=".spec.isDefault"
-//+kubebuilder:printcolumn:name="Friendly Name",type="string",priority=1,JSONPath=".spec.contact.friendlyName"
+//+kubebuilder:printcolumn:name="Friendly Name",type="string",JSONPath=".spec.contact.friendlyName"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // Contact is the Schema for the contacts API

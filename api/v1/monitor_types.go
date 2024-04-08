@@ -62,8 +62,8 @@ type MonitorStatus struct {
 //+kubebuilder:subresource:status
 //+kubebuilder:subresource:scale:specpath=.spec.monitor.status,statuspath=.status.status
 //+kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.ready"
-//+kubebuilder:printcolumn:name="Friendly Name",type="string",priority=1,JSONPath=".spec.monitor.friendlyName"
-//+kubebuilder:printcolumn:name="URL",type="string",priority=1,JSONPath=".spec.monitor.url"
+//+kubebuilder:printcolumn:name="Friendly Name",type="string",JSONPath=".spec.monitor.friendlyName"
+//+kubebuilder:printcolumn:name="URL",type="string",JSONPath=".spec.monitor.url"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // Monitor is the Schema for the monitors API

@@ -20,11 +20,9 @@ spec:
       type: boolean
     - jsonPath: .spec.monitor.friendlyName
       name: Friendly Name
-      priority: 1
       type: string
     - jsonPath: .spec.monitor.url
       name: URL
-      priority: 1
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
