@@ -57,6 +57,11 @@ var ErrKeyNotFound = errors.New("secret key not found")
 func (r *AccountReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
 
+	account := &uptimerobotv1.Account{}
+	if err := r.Client.Get(ctx, req.NamespacedName, account); err != nil {
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
+
 	account, apiKey, err := GetApiKey(ctx, r.Client, req.Name)
 	if err != nil {
 		return ctrl.Result{}, err
