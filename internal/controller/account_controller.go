@@ -62,7 +62,8 @@ func (r *AccountReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	}
 
 	urclient := uptimerobot.NewClient(apiKey)
-	if err := urclient.GetAccountDetails(ctx); err != nil {
+	email, err := urclient.GetAccountDetails(ctx)
+	if err != nil {
 		account.Status.Ready = false
 		if err := r.Status().Update(ctx, account); err != nil {
 			return ctrl.Result{}, err
@@ -72,6 +73,7 @@ func (r *AccountReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	}
 
 	account.Status.Ready = true
+	account.Status.Email = email
 	if err := r.Status().Update(ctx, account); err != nil {
 		return ctrl.Result{}, err
 	}

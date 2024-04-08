@@ -18,6 +18,9 @@ spec:
     - jsonPath: .status.ready
       name: Ready
       type: boolean
+    - jsonPath: .status.email
+      name: Email
+      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -76,9 +79,12 @@ spec:
           status:
             description: AccountStatus defines the observed state of Account
             properties:
+              email:
+                type: string
               ready:
                 type: boolean
             required:
+            - email
             - ready
             type: object
         type: object

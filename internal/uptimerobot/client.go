@@ -249,27 +249,32 @@ func (c Client) FindContactID(ctx context.Context, friendlyName string) (string,
 	return "", ErrContactNotFound
 }
 
-type AcountDetailsResponse struct {
-	Status urtypes.Status `json:"stat"`
+type AccountDetailsResponse struct {
+	Status  urtypes.Status `json:"stat"`
+	Account Account        `json:"account"`
 }
 
-func (c Client) GetAccountDetails(ctx context.Context) error {
+type Account struct {
+	Email string `json:"email"`
+}
+
+func (c Client) GetAccountDetails(ctx context.Context) (string, error) {
 	form := c.NewValues()
 	res, err := c.Do(ctx, "getAccountDetails", form)
 	if err != nil {
-		return err
+		return "", err
 	}
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
 	}(res.Body)
 
-	parsed := &AcountDetailsResponse{}
+	parsed := &AccountDetailsResponse{}
 	if err := json.NewDecoder(res.Body).Decode(&parsed); err != nil {
-		return err
+		return "", err
 	}
 
 	if parsed.Status != urtypes.StatusOK {
-		return ErrResponse
+		return "", ErrResponse
 	}
-	return nil
+	return parsed.Account.Email, err
 }

@@ -32,13 +32,15 @@ type AccountSpec struct {
 
 // AccountStatus defines the observed state of Account
 type AccountStatus struct {
-	Ready bool `json:"ready"`
+	Ready bool   `json:"ready"`
+	Email string `json:"email"`
 }
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 //+kubebuilder:resource:scope=Cluster
 //+kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.ready"
+//+kubebuilder:printcolumn:name="Email",type="string",JSONPath=".status.email"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // Account is the Schema for the accounts API
