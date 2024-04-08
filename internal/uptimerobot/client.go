@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 
@@ -15,10 +16,20 @@ import (
 )
 
 func NewClient(apiKey string) Client {
-	return Client{apiKey: apiKey}
+	api := "https://api.uptimerobot.com/v2"
+	if env := os.Getenv("UPTIME_ROBOT_API"); env != "" {
+		api = env
+	}
+	u, err := url.Parse(api)
+	if err != nil {
+		panic(err)
+	}
+
+	return Client{url: *u, apiKey: apiKey}
 }
 
 type Client struct {
+	url    url.URL
 	apiKey string
 }
 
@@ -30,8 +41,9 @@ func (c Client) NewValues() url.Values {
 }
 
 func (c Client) NewRequest(ctx context.Context, endpoint string, form url.Values) (*http.Request, error) {
-	url := "https://api.uptimerobot.com/v2/" + endpoint
-	req, err := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(form.Encode()))
+	u := c.url.JoinPath(endpoint)
+
+	req, err := http.NewRequestWithContext(ctx, "POST", u.String(), strings.NewReader(form.Encode()))
 	if err != nil {
 		return nil, err
 	}
