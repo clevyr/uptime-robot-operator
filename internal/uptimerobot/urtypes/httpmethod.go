@@ -8,7 +8,7 @@ package urtypes
 type HTTPMethod uint8
 
 const (
-	HTTPHEAD HTTPMethod = iota
+	HTTPHEAD HTTPMethod = iota + 1
 	HTTPGET
 	HTTPPOST
 	HTTPPUT

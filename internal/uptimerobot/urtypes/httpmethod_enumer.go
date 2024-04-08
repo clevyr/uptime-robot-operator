@@ -15,8 +15,9 @@ var _HTTPMethodIndex = [...]uint8{0, 4, 7, 11, 14, 19, 25, 32}
 const _HTTPMethodLowerName = "headgetpostputpatchdeleteoptions"
 
 func (i HTTPMethod) String() string {
+	i -= 1
 	if i >= HTTPMethod(len(_HTTPMethodIndex)-1) {
-		return fmt.Sprintf("HTTPMethod(%d)", i)
+		return fmt.Sprintf("HTTPMethod(%d)", i+1)
 	}
 	return _HTTPMethodName[_HTTPMethodIndex[i]:_HTTPMethodIndex[i+1]]
 }
@@ -25,13 +26,13 @@ func (i HTTPMethod) String() string {
 // Re-run the stringer command to generate them again.
 func _HTTPMethodNoOp() {
 	var x [1]struct{}
-	_ = x[HTTPHEAD-(0)]
-	_ = x[HTTPGET-(1)]
-	_ = x[HTTPPOST-(2)]
-	_ = x[HTTPPUT-(3)]
-	_ = x[HTTPPATCH-(4)]
-	_ = x[HTTPDELETE-(5)]
-	_ = x[HTTPOPTIONS-(6)]
+	_ = x[HTTPHEAD-(1)]
+	_ = x[HTTPGET-(2)]
+	_ = x[HTTPPOST-(3)]
+	_ = x[HTTPPUT-(4)]
+	_ = x[HTTPPATCH-(5)]
+	_ = x[HTTPDELETE-(6)]
+	_ = x[HTTPOPTIONS-(7)]
 }
 
 var _HTTPMethodValues = []HTTPMethod{HTTPHEAD, HTTPGET, HTTPPOST, HTTPPUT, HTTPPATCH, HTTPDELETE, HTTPOPTIONS}

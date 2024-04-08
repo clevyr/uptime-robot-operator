@@ -29,6 +29,6 @@ type Monitor struct {
 	Timeout metav1.Duration `json:"timeout,omitempty"`
 
 	// HTTPMethod defines the HTTP verb to use.
-	//+kubebuilder:default:="GET"
+	//+kubebuilder:default:="HEAD"
 	HTTPMethod urtypes.HTTPMethod `json:"httpMethod,omitempty"`
 }

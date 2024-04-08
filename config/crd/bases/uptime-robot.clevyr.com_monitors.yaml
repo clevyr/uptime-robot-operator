@@ -102,7 +102,7 @@ spec:
                       Robot.
                     type: string
                   httpMethod:
-                    default: GET
+                    default: HEAD
                     description: HTTPMethod defines the HTTP verb to use.
                     enum:
                     - HEAD
