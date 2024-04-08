@@ -1,5 +1,7 @@
 # Uptime Robot Operator
 
+[![Build](https://github.com/clevyr/uptime-robot-operator/actions/workflows/build.yml/badge.svg)](https://github.com/clevyr/uptime-robot-operator/actions/workflows/build.yml)
+
 Kubernetes operator to manage Uptime Robot monitors.
 
 ## Description
