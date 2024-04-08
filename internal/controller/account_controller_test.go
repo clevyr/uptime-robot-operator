@@ -64,7 +64,7 @@ func CreateAccount(ctx context.Context) (*uptimerobotv1.Account, *corev1.Secret)
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "uptime-robot",
-			Namespace: "uptime-robot-operator-system",
+			Namespace: ClusterResourceNamespace,
 		},
 		Data: map[string][]byte{
 			"apiKey": []byte("1234"),

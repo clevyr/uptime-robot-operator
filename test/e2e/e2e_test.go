@@ -27,7 +27,7 @@ import (
 	"github.com/clevyr/uptime-robot-operator/test/utils"
 )
 
-const namespace = "uptime-robot-operator-system"
+const namespace = "uptime-robot-system"
 
 var _ = Describe("controller", Ordered, func() {
 	BeforeAll(func() {
