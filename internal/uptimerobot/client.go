@@ -18,18 +18,14 @@ import (
 func NewClient(apiKey string) Client {
 	api := "https://api.uptimerobot.com/v2"
 	if env := os.Getenv("UPTIME_ROBOT_API"); env != "" {
-		api = env
-	}
-	u, err := url.Parse(api)
-	if err != nil {
-		panic(err)
+		api = strings.TrimSuffix(env, "/")
 	}
 
-	return Client{url: *u, apiKey: apiKey}
+	return Client{url: api, apiKey: apiKey}
 }
 
 type Client struct {
-	url    url.URL
+	url    string
 	apiKey string
 }
 
@@ -41,9 +37,9 @@ func (c Client) NewValues() url.Values {
 }
 
 func (c Client) NewRequest(ctx context.Context, endpoint string, form url.Values) (*http.Request, error) {
-	u := c.url.JoinPath(endpoint)
+	u := c.url + "/" + endpoint
 
-	req, err := http.NewRequestWithContext(ctx, "POST", u.String(), strings.NewReader(form.Encode()))
+	req, err := http.NewRequestWithContext(ctx, "POST", u, strings.NewReader(form.Encode()))
 	if err != nil {
 		return nil, err
 	}
