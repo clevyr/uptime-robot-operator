@@ -55,7 +55,7 @@ func (r *ContactReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	apiKey, err := GetApiKey(ctx, r.Client, nil, contact.Spec.Account.Name)
+	_, apiKey, err := GetApiKey(ctx, r.Client, contact.Spec.Account.Name)
 	if err != nil {
 		return ctrl.Result{}, err
 	}

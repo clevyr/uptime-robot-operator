@@ -56,12 +56,7 @@ var ErrKeyNotFound = errors.New("secret key not found")
 func (r *AccountReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
 
-	account := &uptimerobotv1.Account{}
-	if err := r.Client.Get(ctx, req.NamespacedName, account); err != nil {
-		return ctrl.Result{}, err
-	}
-
-	apiKey, err := GetApiKey(ctx, r.Client, account, req.Name)
+	account, apiKey, err := GetApiKey(ctx, r.Client, req.Name)
 	if err != nil {
 		return ctrl.Result{}, err
 	}
@@ -108,7 +103,7 @@ var (
 
 func GetAccount(ctx context.Context, c client.Client, account *uptimerobotv1.Account, name string) error {
 	if name != "" {
-		return c.Get(ctx, client.ObjectKey{Namespace: name}, account)
+		return c.Get(ctx, client.ObjectKey{Name: name}, account)
 	}
 
 	list := &uptimerobotv1.AccountList{}
@@ -129,12 +124,10 @@ func GetAccount(ctx context.Context, c client.Client, account *uptimerobotv1.Acc
 	return nil
 }
 
-func GetApiKey(ctx context.Context, c client.Client, account *uptimerobotv1.Account, name string) (string, error) {
-	if account == nil {
-		account = &uptimerobotv1.Account{}
-		if err := GetAccount(ctx, c, account, name); err != nil {
-			return "", err
-		}
+func GetApiKey(ctx context.Context, c client.Client, name string) (*uptimerobotv1.Account, string, error) {
+	account := &uptimerobotv1.Account{}
+	if err := GetAccount(ctx, c, account, name); err != nil {
+		return account, "", err
 	}
 
 	secret := &corev1.Secret{}
@@ -143,13 +136,13 @@ func GetApiKey(ctx context.Context, c client.Client, account *uptimerobotv1.Acco
 		Name:      account.Spec.ApiKeySecretRef.Name,
 	}, secret)
 	if err != nil {
-		return "", err
+		return account, "", err
 	}
 
 	apiKey, ok := secret.Data[account.Spec.ApiKeySecretRef.Key]
 	if !ok {
-		return "", fmt.Errorf("%w: %s", ErrKeyNotFound, account.Spec.ApiKeySecretRef.Key)
+		return account, "", fmt.Errorf("%w: %s", ErrKeyNotFound, account.Spec.ApiKeySecretRef.Key)
 	}
 
-	return string(apiKey), nil
+	return account, string(apiKey), nil
 }

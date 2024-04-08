@@ -58,7 +58,7 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	apiKey, err := GetApiKey(ctx, r.Client, nil, monitor.Spec.Account.Name)
+	_, apiKey, err := GetApiKey(ctx, r.Client, monitor.Spec.Account.Name)
 	if err != nil {
 		return ctrl.Result{}, err
 	}
