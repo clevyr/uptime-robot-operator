@@ -21,11 +21,10 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"k8s.io/apimachinery/pkg/api/errors"
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
-
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	uptimerobotv1 "github.com/clevyr/uptime-robot-operator/api/v1"
 )
@@ -33,52 +32,87 @@ import (
 var _ = Describe("Account Controller", func() {
 	Context("When reconciling a resource", func() {
 		const resourceName = "test-resource"
-
 		ctx := context.Background()
-
-		typeNamespacedName := types.NamespacedName{
-			Name:      resourceName,
-			Namespace: "default", // TODO(user):Modify as needed
-		}
-		account := &uptimerobotv1.Account{}
+		namespacedName := types.NamespacedName{Name: resourceName}
+		var (
+			secret  *corev1.Secret
+			account *uptimerobotv1.Account
+		)
 
 		BeforeEach(func() {
-			By("creating the custom resource for the Kind Account")
-			err := k8sClient.Get(ctx, typeNamespacedName, account)
-			if err != nil && errors.IsNotFound(err) {
-				resource := &uptimerobotv1.Account{
-					ObjectMeta: metav1.ObjectMeta{
-						Name:      resourceName,
-						Namespace: "default",
-					},
-					// TODO(user): Specify other spec details if needed.
-				}
-				Expect(k8sClient.Create(ctx, resource)).To(Succeed())
-			}
+			account, secret = CreateAccount(ctx)
 		})
 
 		AfterEach(func() {
-			// TODO(user): Cleanup logic after each test, like removing the resource instance.
 			resource := &uptimerobotv1.Account{}
-			err := k8sClient.Get(ctx, typeNamespacedName, resource)
+			err := k8sClient.Get(ctx, namespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
 
 			By("Cleanup the specific resource instance Account")
-			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
+			CleanupAccount(ctx, account, secret)
 		})
+
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
-			controllerReconciler := &AccountReconciler{
-				Client: k8sClient,
-				Scheme: k8sClient.Scheme(),
-			}
-
-			_, err := controllerReconciler.Reconcile(ctx, reconcile.Request{
-				NamespacedName: typeNamespacedName,
-			})
-			Expect(err).NotTo(HaveOccurred())
-			// TODO(user): Add more specific assertions depending on your controller's reconciliation logic.
-			// Example: If you expect a certain status condition after reconciliation, verify it here.
+			ReconcileAccount(ctx, account)
 		})
 	})
 })
+
+func CreateAccount(ctx context.Context) (*uptimerobotv1.Account, *corev1.Secret) {
+	By("creating the secret for the Kind Account")
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "uptime-robot",
+			Namespace: "uptime-robot-operator-system",
+		},
+		Data: map[string][]byte{
+			"apiKey": []byte("1234"),
+		},
+	}
+	Expect(k8sClient.Create(ctx, secret)).To(Succeed())
+
+	By("creating the custom resource for the Kind Account")
+	account := &uptimerobotv1.Account{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "test-resource",
+		},
+		Spec: uptimerobotv1.AccountSpec{
+			ApiKeySecretRef: corev1.SecretKeySelector{
+				LocalObjectReference: corev1.LocalObjectReference{
+					Name: "uptime-robot",
+				},
+				Key: "apiKey",
+			},
+		},
+	}
+	Expect(k8sClient.Create(ctx, account)).To(Succeed())
+
+	return account, secret
+}
+
+func ReconcileAccount(ctx context.Context, account *uptimerobotv1.Account) {
+	controllerReconciler := &AccountReconciler{
+		Client: k8sClient,
+		Scheme: k8sClient.Scheme(),
+	}
+
+	namespacedName := types.NamespacedName{Name: account.Name}
+
+	_, err := controllerReconciler.Reconcile(ctx, reconcile.Request{
+		NamespacedName: namespacedName,
+	})
+	Expect(err).NotTo(HaveOccurred())
+
+	Expect(k8sClient.Get(ctx, namespacedName, account)).To(Succeed())
+	Expect(account.Status.Ready).To(Equal(true))
+}
+
+func CleanupAccount(ctx context.Context, account *uptimerobotv1.Account, secret *corev1.Secret) {
+	if account != nil {
+		Expect(k8sClient.Delete(ctx, account)).To(Succeed())
+	}
+	if secret != nil {
+		Expect(k8sClient.Delete(ctx, secret)).To(Succeed())
+	}
+}

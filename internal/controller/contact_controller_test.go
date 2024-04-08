@@ -19,9 +19,10 @@ package controller
 import (
 	"context"
 
+	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"k8s.io/apimachinery/pkg/api/errors"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
@@ -33,52 +34,81 @@ import (
 var _ = Describe("Contact Controller", func() {
 	Context("When reconciling a resource", func() {
 		const resourceName = "test-resource"
-
 		ctx := context.Background()
-
-		typeNamespacedName := types.NamespacedName{
-			Name:      resourceName,
-			Namespace: "default", // TODO(user):Modify as needed
-		}
-		contact := &uptimerobotv1.Contact{}
+		namespacedName := types.NamespacedName{Name: resourceName}
+		var (
+			secret  *corev1.Secret
+			account *uptimerobotv1.Account
+			contact *uptimerobotv1.Contact
+		)
 
 		BeforeEach(func() {
+			By("creating the custom resource for the Kind Account")
+			account, secret = CreateAccount(ctx)
+			ReconcileAccount(ctx, account)
+
 			By("creating the custom resource for the Kind Contact")
-			err := k8sClient.Get(ctx, typeNamespacedName, contact)
-			if err != nil && errors.IsNotFound(err) {
-				resource := &uptimerobotv1.Contact{
-					ObjectMeta: metav1.ObjectMeta{
-						Name:      resourceName,
-						Namespace: "default",
-					},
-					// TODO(user): Specify other spec details if needed.
-				}
-				Expect(k8sClient.Create(ctx, resource)).To(Succeed())
-			}
+			contact = CreateContact(ctx, account.Name)
 		})
 
 		AfterEach(func() {
-			// TODO(user): Cleanup logic after each test, like removing the resource instance.
 			resource := &uptimerobotv1.Contact{}
-			err := k8sClient.Get(ctx, typeNamespacedName, resource)
+			err := k8sClient.Get(ctx, namespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
 
 			By("Cleanup the specific resource instance Contact")
-			Expect(k8sClient.Delete(ctx, resource)).To(Succeed())
+			CleanupContact(ctx, contact)
+
+			By("Cleanup the specific resource instance Account")
+			CleanupAccount(ctx, account, secret)
 		})
+
 		It("should successfully reconcile the resource", func() {
 			By("Reconciling the created resource")
-			controllerReconciler := &ContactReconciler{
-				Client: k8sClient,
-				Scheme: k8sClient.Scheme(),
-			}
-
-			_, err := controllerReconciler.Reconcile(ctx, reconcile.Request{
-				NamespacedName: typeNamespacedName,
-			})
-			Expect(err).NotTo(HaveOccurred())
-			// TODO(user): Add more specific assertions depending on your controller's reconciliation logic.
-			// Example: If you expect a certain status condition after reconciliation, verify it here.
+			ReconcileContact(ctx, contact)
 		})
 	})
 })
+
+func CreateContact(ctx context.Context, accountName string) *uptimerobotv1.Contact {
+	By("creating the secret for the Kind Contact")
+	contact := &uptimerobotv1.Contact{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "test-resource",
+		},
+		Spec: uptimerobotv1.ContactSpec{
+			Account: corev1.LocalObjectReference{
+				Name: accountName,
+			},
+			Contact: uptimerobot.Contact{
+				FriendlyName: "John Doe",
+			},
+		},
+	}
+	Expect(k8sClient.Create(ctx, contact)).To(Succeed())
+	return contact
+}
+
+func ReconcileContact(ctx context.Context, contact *uptimerobotv1.Contact) {
+	controllerReconciler := &ContactReconciler{
+		Client: k8sClient,
+		Scheme: k8sClient.Scheme(),
+	}
+
+	namespacedName := types.NamespacedName{Name: contact.Name}
+
+	_, err := controllerReconciler.Reconcile(ctx, reconcile.Request{
+		NamespacedName: namespacedName,
+	})
+	Expect(err).NotTo(HaveOccurred())
+
+	Expect(k8sClient.Get(ctx, namespacedName, contact)).To(Succeed())
+	Expect(contact.Status.Ready).To(Equal(true))
+	Expect(contact.Status.ID).To(Equal("0993765"))
+}
+
+func CleanupContact(ctx context.Context, contact *uptimerobotv1.Contact) {
+	if contact != nil {
+		Expect(k8sClient.Delete(ctx, contact)).To(Succeed())
+	}
+}
