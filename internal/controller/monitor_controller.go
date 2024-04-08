@@ -19,9 +19,11 @@ package controller
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot"
 	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot/urtypes"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
@@ -39,11 +41,15 @@ type MonitorReconciler struct {
 	Scheme *runtime.Scheme
 }
 
-var ErrContactMissingID = errors.New("contact missing ID")
+var (
+	ErrContactMissingID = errors.New("contact missing ID")
+	ErrSecretMissingKey = errors.New("secret missing key")
+)
 
 //+kubebuilder:rbac:groups=uptime-robot.clevyr.com,resources=monitors,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=uptime-robot.clevyr.com,resources=monitors/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=uptime-robot.clevyr.com,resources=monitors/finalizers,verbs=update
+//+kubebuilder:rbac:groups="",resources=secrets,verbs=get;list;watch
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -108,6 +114,30 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 			ID:                   contact.Status.ID,
 			MonitorContactCommon: ref.MonitorContactCommon,
 		})
+	}
+
+	if auth := monitor.Spec.Monitor.Auth; auth != nil && auth.SecretName != "" {
+		secret := &corev1.Secret{}
+		if err := r.Client.Get(ctx, client.ObjectKey{
+			Namespace: req.Namespace,
+			Name:      auth.SecretName,
+		}, secret); err != nil {
+			return ctrl.Result{}, err
+		}
+
+		val, ok := secret.Data[auth.UsernameKey]
+		if !ok {
+			return ctrl.Result{}, fmt.Errorf("%w: %s", ErrSecretMissingKey, auth.UsernameKey)
+		}
+		auth.Username = string(val)
+
+		if auth.PasswordKey != "" {
+			val, ok := secret.Data[auth.PasswordKey]
+			if !ok {
+				return ctrl.Result{}, fmt.Errorf("%w: %s", ErrSecretMissingKey, auth.PasswordKey)
+			}
+			auth.Password = string(val)
+		}
 	}
 
 	if !monitor.Status.Ready {

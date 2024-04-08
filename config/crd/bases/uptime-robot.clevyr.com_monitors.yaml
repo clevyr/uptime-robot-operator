@@ -97,6 +97,28 @@ spec:
               monitor:
                 description: Monitor configures the Uptime Robot monitor.
                 properties:
+                  auth:
+                    description: Auth enables monitor auth.
+                    properties:
+                      password:
+                        type: string
+                      passwordKey:
+                        type: string
+                      secretName:
+                        type: string
+                      type:
+                        default: Basic
+                        enum:
+                        - Basic
+                        - Digest
+                        type: string
+                      username:
+                        type: string
+                      usernameKey:
+                        type: string
+                    required:
+                    - type
+                    type: object
                   friendlyName:
                     description: FriendlyName sets the name that is shown in Uptime
                       Robot.

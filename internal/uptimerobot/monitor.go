@@ -41,6 +41,9 @@ type Monitor struct {
 
 	// Port provides configuration for the Port monitor type.
 	Port *MonitorPort `json:"port,omitempty"`
+
+	// Auth enables monitor auth.
+	Auth *MonitorAuth `json:"auth,omitempty"`
 }
 
 type MonitorKeyword struct {
@@ -59,4 +62,16 @@ type MonitorPort struct {
 	Type urtypes.PortType `json:"type"`
 
 	Number uint16 `json:"number,omitempty"`
+}
+
+type MonitorAuth struct {
+	//+kubebuilder:default:="Basic"
+	Type urtypes.MonitorAuthType `json:"type"`
+
+	Username string `json:"username,omitempty"`
+	Password string `json:"password,omitempty"`
+
+	SecretName  string `json:"secretName,omitempty"`
+	UsernameKey string `json:"usernameKey,omitempty"`
+	PasswordKey string `json:"passwordKey,omitempty"`
 }
