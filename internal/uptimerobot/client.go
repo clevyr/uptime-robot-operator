@@ -76,6 +76,15 @@ func (c Client) MonitorValues(monitor Monitor, form url.Values, contacts Monitor
 	form.Set("timeout", strconv.Itoa(int(monitor.Timeout.Seconds())))
 	form.Set("alert_contacts", contacts.String())
 	form.Set("http_method", strconv.Itoa(int(monitor.HTTPMethod)))
+	if monitor.Type == urtypes.TypeKeyword && monitor.Keyword != nil {
+		form.Set("keyword_type", strconv.Itoa(int(monitor.Keyword.Type)))
+		caseType := "1"
+		if monitor.Keyword.CaseSensitive {
+			caseType = "0"
+		}
+		form.Set("keyword_case_type", caseType)
+		form.Set("keyword_value", monitor.Keyword.Value)
+	}
 	return form
 }
 

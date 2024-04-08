@@ -117,6 +117,24 @@ spec:
                     default: 60s
                     description: Interval is the monitoring interval.
                     type: string
+                  keyword:
+                    description: Keyword provides configuration for the Keyword monitor
+                      type.
+                    properties:
+                      caseSensitive:
+                        default: false
+                        type: boolean
+                      type:
+                        enum:
+                        - Exists
+                        - NotExists
+                        type: string
+                      value:
+                        type: string
+                    required:
+                    - type
+                    - value
+                    type: object
                   status:
                     default: 1
                     description: Status toggles pause status for the monitor. 0 is
@@ -143,6 +161,9 @@ spec:
                 - friendlyName
                 - url
                 type: object
+                x-kubernetes-validations:
+                - message: Keyword config is required if type is Keyword
+                  rule: self.type != 'Keyword' || has(self.keyword)
               prune:
                 default: true
                 description: Prune enables garbage collection.

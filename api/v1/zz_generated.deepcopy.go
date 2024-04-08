@@ -286,7 +286,7 @@ func (in *MonitorSpec) DeepCopyInto(out *MonitorSpec) {
 	*out = *in
 	out.Interval = in.Interval
 	out.Account = in.Account
-	out.Monitor = in.Monitor
+	in.Monitor.DeepCopyInto(&out.Monitor)
 	if in.Contacts != nil {
 		in, out := &in.Contacts, &out.Contacts
 		*out = make([]MonitorContactRef, len(*in))
