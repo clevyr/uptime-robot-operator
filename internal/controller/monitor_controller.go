@@ -64,7 +64,12 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	_, apiKey, err := GetApiKey(ctx, r.Client, monitor.Spec.Account.Name)
+	account := &uptimerobotv1.Account{}
+	if err := GetAccount(ctx, r.Client, account, monitor.Spec.Account.Name); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	apiKey, err := GetApiKey(ctx, r.Client, account)
 	if err != nil {
 		return ctrl.Result{}, err
 	}

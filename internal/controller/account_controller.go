@@ -62,7 +62,7 @@ func (r *AccountReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	account, apiKey, err := GetApiKey(ctx, r.Client, req.Name)
+	apiKey, err := GetApiKey(ctx, r.Client, account)
 	if err != nil {
 		return ctrl.Result{}, err
 	}
@@ -132,25 +132,20 @@ func GetAccount(ctx context.Context, c client.Client, account *uptimerobotv1.Acc
 	return nil
 }
 
-func GetApiKey(ctx context.Context, c client.Client, name string) (*uptimerobotv1.Account, string, error) {
-	account := &uptimerobotv1.Account{}
-	if err := GetAccount(ctx, c, account, name); err != nil {
-		return account, "", err
-	}
-
+func GetApiKey(ctx context.Context, c client.Client, account *uptimerobotv1.Account) (string, error) {
 	secret := &corev1.Secret{}
 	err := c.Get(ctx, client.ObjectKey{
 		Namespace: ClusterResourceNamespace,
 		Name:      account.Spec.ApiKeySecretRef.Name,
 	}, secret)
 	if err != nil {
-		return account, "", err
+		return "", err
 	}
 
 	apiKey, ok := secret.Data[account.Spec.ApiKeySecretRef.Key]
 	if !ok {
-		return account, "", fmt.Errorf("%w: %s", ErrKeyNotFound, account.Spec.ApiKeySecretRef.Key)
+		return "", fmt.Errorf("%w: %s", ErrKeyNotFound, account.Spec.ApiKeySecretRef.Key)
 	}
 
-	return account, string(apiKey), nil
+	return string(apiKey), nil
 }

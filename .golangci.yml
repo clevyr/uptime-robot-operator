@@ -16,6 +16,11 @@ issues:
       linters:
         - dupl
         - lll
+
+linters-settings:
+  gocyclo:
+    min-complexity: 35
+
 linters:
   disable-all: true
   enable:

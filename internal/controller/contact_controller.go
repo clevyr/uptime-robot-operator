@@ -55,7 +55,12 @@ func (r *ContactReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	_, apiKey, err := GetApiKey(ctx, r.Client, contact.Spec.Account.Name)
+	account := &uptimerobotv1.Account{}
+	if err := GetAccount(ctx, r.Client, account, contact.Spec.Account.Name); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	apiKey, err := GetApiKey(ctx, r.Client, account)
 	if err != nil {
 		return ctrl.Result{}, err
 	}
