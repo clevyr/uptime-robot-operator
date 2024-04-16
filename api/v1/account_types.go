@@ -40,6 +40,7 @@ type AccountStatus struct {
 //+kubebuilder:subresource:status
 //+kubebuilder:resource:scope=Cluster
 //+kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.ready"
+//+kubebuilder:printcolumn:name="Default",type="boolean",JSONPath=".spec.isDefault"
 //+kubebuilder:printcolumn:name="Email",type="string",JSONPath=".status.email"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 

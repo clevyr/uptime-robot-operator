@@ -18,6 +18,9 @@ spec:
     - jsonPath: .status.ready
       name: Ready
       type: boolean
+    - jsonPath: .spec.isDefault
+      name: Default
+      type: boolean
     - jsonPath: .status.email
       name: Email
       type: string
