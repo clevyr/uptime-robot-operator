@@ -75,8 +75,7 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	}
 	urclient := uptimerobot.NewClient(apiKey)
 
-	myFinalizerName := "uptime-robot.clevyr.com/finalizer"
-
+	const myFinalizerName = "uptime-robot.clevyr.com/finalizer"
 	if !monitor.DeletionTimestamp.IsZero() {
 		// Object is being deleted
 		if controllerutil.ContainsFinalizer(monitor, myFinalizerName) {
