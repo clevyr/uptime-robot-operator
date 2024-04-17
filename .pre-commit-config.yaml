@@ -8,3 +8,18 @@ repos:
       - id: go-vet-mod
       - id: golangci-lint-mod
         args: [--fix]
+
+  - repo: local
+    hooks:
+      - id: manifests
+        name: manifests
+        entry: make manifests
+        language: system
+        types: [go]
+        pass_filenames: false
+      - id: generate
+        name: generate
+        entry: make generate
+        language: system
+        types: [go]
+        pass_filenames: false
