@@ -70,6 +70,9 @@ func main() {
 	flag.StringVar(&clusterResourceNamespace, "cluster-resource-namespace", controller.ClusterResourceNamespace,
 		"Namespace to store resources owned by cluster scoped resources",
 	)
+	flag.StringVar(&controller.IngressAnnotationPrefix, "ingress-annotation-prefix", controller.IngressAnnotationPrefix,
+		"Ingress annotation prefix",
+	)
 	opts := zap.Options{
 		Development: true,
 	}

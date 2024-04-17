@@ -38,7 +38,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 )
 
-const AnnotationPrefix = "uptime-robot.clevyr.com/"
+var IngressAnnotationPrefix = "uptime-robot.clevyr.com/"
 
 // IngressReconciler reconciles a Ingress object
 type IngressReconciler struct {
@@ -170,7 +170,7 @@ func (r *IngressReconciler) findMonitors(ctx context.Context, ingress *networkin
 func (r *IngressReconciler) countMatchingAnnotations(ingress *networkingv1.Ingress) uint {
 	var count uint
 	for k := range ingress.Annotations {
-		if strings.HasPrefix(k, AnnotationPrefix) {
+		if strings.HasPrefix(k, IngressAnnotationPrefix) {
 			count++
 		}
 	}
@@ -180,8 +180,8 @@ func (r *IngressReconciler) countMatchingAnnotations(ingress *networkingv1.Ingre
 func (r *IngressReconciler) getMatchingAnnotations(ingress *networkingv1.Ingress) map[string]string {
 	annotations := make(map[string]string, r.countMatchingAnnotations(ingress))
 	for k, v := range ingress.Annotations {
-		if strings.HasPrefix(k, AnnotationPrefix) {
-			annotations[strings.TrimPrefix(k, AnnotationPrefix)] = v
+		if strings.HasPrefix(k, IngressAnnotationPrefix) {
+			annotations[strings.TrimPrefix(k, IngressAnnotationPrefix)] = v
 		}
 	}
 	return annotations
