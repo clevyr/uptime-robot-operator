@@ -80,7 +80,7 @@ func CreateContact(ctx context.Context, accountName string) *uptimerobotv1.Conta
 				Name: accountName,
 			},
 			Contact: uptimerobotv1.ContactValues{
-				FriendlyName: "John Doe",
+				Name: "John Doe",
 			},
 		},
 	}

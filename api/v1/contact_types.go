@@ -44,7 +44,7 @@ type ContactStatus struct {
 //+kubebuilder:resource:scope=Cluster
 //+kubebuilder:printcolumn:name="Ready",type="boolean",JSONPath=".status.ready"
 //+kubebuilder:printcolumn:name="Default",type="boolean",JSONPath=".spec.isDefault"
-//+kubebuilder:printcolumn:name="Friendly Name",type="string",JSONPath=".spec.contact.friendlyName"
+//+kubebuilder:printcolumn:name="Friendly Name",type="string",JSONPath=".spec.contact.name"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // Contact is the Schema for the contacts API
@@ -66,8 +66,8 @@ type ContactList struct {
 }
 
 type ContactValues struct {
-	// FriendlyName sets the name that is shown in Uptime Robot.
-	FriendlyName string `json:"friendlyName"`
+	// Name sets the name that is shown in Uptime Robot.
+	Name string `json:"name"`
 }
 
 func init() {
