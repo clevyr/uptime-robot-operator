@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 
+	uptimerobotv1 "github.com/clevyr/uptime-robot-operator/api/v1"
 	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot/urtypes"
 )
 
@@ -68,7 +69,7 @@ func (c Client) Do(ctx context.Context, endpoint string, form url.Values) (*http
 	return res, nil
 }
 
-func (c Client) MonitorValues(monitor Monitor, form url.Values, contacts MonitorContacts) url.Values {
+func (c Client) MonitorValues(monitor uptimerobotv1.MonitorValues, form url.Values, contacts uptimerobotv1.MonitorContacts) url.Values {
 	form.Set("friendly_name", monitor.FriendlyName)
 	form.Set("url", monitor.URL)
 	form.Set("type", strconv.Itoa(int(monitor.Type)))
@@ -129,7 +130,7 @@ var (
 	ErrResponse = errors.New("received fail from Uptime Robot API")
 )
 
-func (c Client) CreateMonitor(ctx context.Context, monitor Monitor, contacts MonitorContacts) (string, error) {
+func (c Client) CreateMonitor(ctx context.Context, monitor uptimerobotv1.MonitorValues, contacts uptimerobotv1.MonitorContacts) (string, error) {
 	form := c.MonitorValues(monitor, c.NewValues(), contacts)
 
 	res, err := c.Do(ctx, "newMonitor", form)
@@ -182,7 +183,7 @@ func (c Client) DeleteMonitor(ctx context.Context, id string) error {
 	return nil
 }
 
-func (c Client) EditMonitor(ctx context.Context, id string, monitor Monitor, contacts MonitorContacts) (string, error) {
+func (c Client) EditMonitor(ctx context.Context, id string, monitor uptimerobotv1.MonitorValues, contacts uptimerobotv1.MonitorContacts) (string, error) {
 	form := c.MonitorValues(monitor, c.NewValues(), contacts)
 	form.Set("id", id)
 	form.Set("status", strconv.Itoa(int(monitor.Status)))

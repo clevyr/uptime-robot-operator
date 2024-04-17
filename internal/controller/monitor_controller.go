@@ -102,7 +102,7 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		monitor.Status.Ready = false
 	}
 
-	contacts := make([]uptimerobot.MonitorContact, 0, len(monitor.Spec.Contacts))
+	contacts := make([]uptimerobotv1.MonitorContact, 0, len(monitor.Spec.Contacts))
 	for _, ref := range monitor.Spec.Contacts {
 		contact := &uptimerobotv1.Contact{}
 
@@ -114,7 +114,7 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 			return ctrl.Result{}, ErrContactMissingID
 		}
 
-		contacts = append(contacts, uptimerobot.MonitorContact{
+		contacts = append(contacts, uptimerobotv1.MonitorContact{
 			ID:                   contact.Status.ID,
 			MonitorContactCommon: ref.MonitorContactCommon,
 		})

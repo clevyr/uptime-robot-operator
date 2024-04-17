@@ -3,6 +3,8 @@ package uptimerobot
 import (
 	"net/url"
 	"strings"
+
+	uptimerobotv1 "github.com/clevyr/uptime-robot-operator/api/v1"
 )
 
 type FindOpt func(form url.Values)
@@ -13,7 +15,7 @@ func FindBySearch(val string) FindOpt {
 	}
 }
 
-func FindByURL(monitor Monitor) FindOpt {
+func FindByURL(monitor uptimerobotv1.MonitorValues) FindOpt {
 	return FindBySearch(monitor.URL)
 }
 

@@ -17,7 +17,6 @@ limitations under the License.
 package v1
 
 import (
-	"github.com/clevyr/uptime-robot-operator/internal/uptimerobot"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -31,7 +30,7 @@ type ContactSpec struct {
 	Account corev1.LocalObjectReference `json:"account,omitempty"`
 
 	// Contact configures the Uptime Robot monitor.
-	Contact uptimerobot.Contact `json:"contact"`
+	Contact ContactValues `json:"contact"`
 }
 
 // ContactStatus defines the observed state of Contact
@@ -64,6 +63,11 @@ type ContactList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []Contact `json:"items"`
+}
+
+type ContactValues struct {
+	// FriendlyName sets the name that is shown in Uptime Robot.
+	FriendlyName string `json:"friendlyName"`
 }
 
 func init() {
