@@ -1,6 +1,6 @@
 package urtypes
 
-//go:generate enumer -type HTTPMethod -trimprefix HTTP -json -text
+//go:generate enumer -type HTTPMethod -trimprefix Method -json -text
 
 //+kubebuilder:validation:Type:=string
 //+kubebuilder:validation:Enum:=HEAD;GET;POST;PUT;PATCH;DELETE;OPTIONS
@@ -8,11 +8,11 @@ package urtypes
 type HTTPMethod uint8
 
 const (
-	HTTPHEAD HTTPMethod = iota + 1
-	HTTPGET
-	HTTPPOST
-	HTTPPUT
-	HTTPPATCH
-	HTTPDELETE
-	HTTPOPTIONS
+	MethodHEAD HTTPMethod = iota + 1
+	MethodGET
+	MethodPOST
+	MethodPUT
+	MethodPATCH
+	MethodDELETE
+	MethodOPTIONS
 )
