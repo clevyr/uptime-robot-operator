@@ -76,6 +76,15 @@ func (c Client) MonitorValues(monitor Monitor, form url.Values, contacts Monitor
 	form.Set("timeout", strconv.Itoa(int(monitor.Timeout.Seconds())))
 	form.Set("alert_contacts", contacts.String())
 	form.Set("http_method", strconv.Itoa(int(monitor.HTTPMethod)))
+	switch monitor.HTTPMethod {
+	case urtypes.MethodHEAD, urtypes.MethodGET:
+	default:
+		if monitor.POST != nil {
+			form.Set("post_type", strconv.Itoa(int(monitor.POST.Type)))
+			form.Set("post_content_type", strconv.Itoa(int(monitor.POST.ContentType)))
+			form.Set("post_value", monitor.POST.Value)
+		}
+	}
 	var username, password string
 	if monitor.Auth != nil {
 		form.Set("http_auth_type", strconv.Itoa(int(monitor.Auth.Type)))

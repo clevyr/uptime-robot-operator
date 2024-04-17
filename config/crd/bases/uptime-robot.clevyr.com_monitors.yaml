@@ -180,6 +180,31 @@ spec:
                       rule: self.type != 'Custom' || has(self.number)
                     - message: Type must be Custom if Number is set
                       rule: self.type == 'Custom' || !has(self.number)
+                  post:
+                    description: POST configures POST, PUT, PATCH, DELETE, and OPTIONS
+                      requests.
+                    properties:
+                      contentType:
+                        default: text/html
+                        description: ContentType sets the Content-Type header for
+                          POST, PUT, PATCH, DELETE, and OPTIONS requests.
+                        enum:
+                        - text/html
+                        - application/json
+                        type: string
+                      postType:
+                        default: KeyValue
+                        description: Type defines the format of data to be sent with
+                          POST, PUT, PATCH, DELETE, and OPTIONS requests.
+                        enum:
+                        - KeyValue
+                        - RawData
+                        type: string
+                      value:
+                        description: Value is the JSON form of data to be sent with
+                          POST, PUT, PATCH, DELETE, and OPTIONS requests.
+                        type: string
+                    type: object
                   status:
                     default: 1
                     description: Status toggles pause status for the monitor. 0 is

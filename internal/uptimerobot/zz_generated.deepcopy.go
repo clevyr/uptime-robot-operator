@@ -37,6 +37,11 @@ func (in *Monitor) DeepCopyInto(out *Monitor) {
 		*out = new(v1.Duration)
 		**out = **in
 	}
+	if in.POST != nil {
+		in, out := &in.POST, &out.POST
+		*out = new(MonitorPOST)
+		**out = **in
+	}
 	if in.Keyword != nil {
 		in, out := &in.Keyword, &out.Keyword
 		*out = new(MonitorKeyword)

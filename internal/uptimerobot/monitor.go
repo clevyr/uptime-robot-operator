@@ -36,6 +36,9 @@ type Monitor struct {
 	//+kubebuilder:default:="HEAD"
 	HTTPMethod urtypes.HTTPMethod `json:"httpMethod,omitempty"`
 
+	// POST configures POST, PUT, PATCH, DELETE, and OPTIONS requests.
+	POST *MonitorPOST `json:"post,omitempty"`
+
 	// Keyword provides configuration for the Keyword monitor type.
 	Keyword *MonitorKeyword `json:"keyword,omitempty"`
 
@@ -76,4 +79,17 @@ type MonitorAuth struct {
 	SecretName  string `json:"secretName,omitempty"`
 	UsernameKey string `json:"usernameKey,omitempty"`
 	PasswordKey string `json:"passwordKey,omitempty"`
+}
+
+type MonitorPOST struct {
+	// Type defines the format of data to be sent with POST, PUT, PATCH, DELETE, and OPTIONS requests.
+	//+kubebuilder:default:="KeyValue"
+	Type urtypes.POSTType `json:"postType,omitempty"`
+
+	// ContentType sets the Content-Type header for POST, PUT, PATCH, DELETE, and OPTIONS requests.
+	//+kubebuilder:default:="text/html"
+	ContentType urtypes.POSTContentType `json:"contentType,omitempty"`
+
+	// Value is the JSON form of data to be sent with POST, PUT, PATCH, DELETE, and OPTIONS requests.
+	Value string `json:"value,omitempty"`
 }
