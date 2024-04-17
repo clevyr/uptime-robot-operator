@@ -1,6 +1,6 @@
 package urtypes
 
-//go:generate enumer -type KeywordType -json -trimprefix Keyword
+//go:generate enumer -type KeywordType -trimprefix Keyword -json -text
 
 //+kubebuilder:validation:Type:=string
 //+kubebuilder:validation:Enum:=Exists;NotExists

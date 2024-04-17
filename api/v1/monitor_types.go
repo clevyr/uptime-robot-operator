@@ -34,7 +34,7 @@ type MonitorContactRef struct {
 type MonitorSpec struct {
 	// Interval defines the reconcile interval.
 	//+kubebuilder:default:="24h"
-	Interval metav1.Duration `json:"interval,omitempty"`
+	Interval *metav1.Duration `json:"interval,omitempty"`
 
 	// Prune enables garbage collection.
 	//+kubebuilder:default:=true
@@ -48,6 +48,9 @@ type MonitorSpec struct {
 
 	// +kubebuilder:default:={{}}
 	Contacts []MonitorContactRef `json:"contacts,omitempty"`
+
+	// SourceRef optionally references the object that created this Monitor.
+	SourceRef *corev1.TypedLocalObjectReference `json:"sourceRef,omitempty"`
 }
 
 // MonitorStatus defines the observed state of Monitor

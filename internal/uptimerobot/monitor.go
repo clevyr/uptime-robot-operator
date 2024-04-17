@@ -22,7 +22,7 @@ type Monitor struct {
 
 	// Interval is the monitoring interval.
 	//+kubebuilder:default:="60s"
-	Interval metav1.Duration `json:"interval,omitempty"`
+	Interval *metav1.Duration `json:"interval,omitempty"`
 
 	// Status toggles pause status for the monitor. 0 is paused, 1 is running.
 	//+kubebuilder:default:=1
@@ -30,7 +30,7 @@ type Monitor struct {
 
 	// Timeout is the monitor timeout.
 	//+kubebuilder:default:="30s"
-	Timeout metav1.Duration `json:"timeout,omitempty"`
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
 
 	// HTTPMethod defines the HTTP verb to use.
 	//+kubebuilder:default:="HEAD"
@@ -46,11 +46,13 @@ type Monitor struct {
 	Auth *MonitorAuth `json:"auth,omitempty"`
 }
 
+//+kubebuilder:object:generate=true
+
 type MonitorKeyword struct {
 	Type urtypes.KeywordType `json:"type"`
 
 	//+kubebuilder:default:=false
-	CaseSensitive bool `json:"caseSensitive,omitempty"`
+	CaseSensitive *bool `json:"caseSensitive,omitempty"`
 
 	Value string `json:"value"`
 }

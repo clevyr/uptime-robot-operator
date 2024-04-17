@@ -1,6 +1,6 @@
 package urtypes
 
-//go:generate enumer -type MonitorType -json -trimprefix Type
+//go:generate enumer -type MonitorType -trimprefix Type -json -text
 
 //+kubebuilder:validation:Type:=string
 //+kubebuilder:validation:Enum:=HTTPS;Keyword;Ping;Port;Heartbeat

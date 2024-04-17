@@ -188,6 +188,16 @@ func (r *MonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *MonitorReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	if err := mgr.GetFieldIndexer().IndexField(context.Background(), &uptimerobotv1.Monitor{}, "spec.sourceRef", func(rawObj client.Object) []string {
+		monitor := rawObj.(*uptimerobotv1.Monitor)
+		if monitor.Spec.SourceRef == nil {
+			return nil
+		}
+		return []string{monitor.Spec.SourceRef.Kind + "/" + monitor.Spec.SourceRef.Name}
+	}); err != nil {
+		return err
+	}
+
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&uptimerobotv1.Monitor{}, builder.WithPredicates(predicate.GenerationChangedPredicate{})).
 		Complete(r)

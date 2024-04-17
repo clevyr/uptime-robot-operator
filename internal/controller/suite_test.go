@@ -37,6 +37,8 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
+	networkingv1 "k8s.io/api/networking/v1"
+
 	uptimerobotv1 "github.com/clevyr/uptime-robot-operator/api/v1"
 	//+kubebuilder:scaffold:imports
 )
@@ -81,6 +83,9 @@ var _ = BeforeSuite(func() {
 	Expect(cfg).NotTo(BeNil())
 
 	err = uptimerobotv1.AddToScheme(scheme.Scheme)
+	Expect(err).NotTo(HaveOccurred())
+
+	err = networkingv1.AddToScheme(scheme.Scheme)
 	Expect(err).NotTo(HaveOccurred())
 
 	//+kubebuilder:scaffold:scheme

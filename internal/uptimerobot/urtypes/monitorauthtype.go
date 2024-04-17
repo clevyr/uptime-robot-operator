@@ -1,6 +1,6 @@
 package urtypes
 
-//go:generate enumer -type MonitorAuthType -json -trimprefix Auth
+//go:generate enumer -type MonitorAuthType -trimprefix Auth -json -text
 
 //+kubebuilder:validation:Type:=string
 //+kubebuilder:validation:Enum:=Basic;Digest

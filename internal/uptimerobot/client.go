@@ -89,7 +89,7 @@ func (c Client) MonitorValues(monitor Monitor, form url.Values, contacts Monitor
 		if monitor.Keyword != nil {
 			form.Set("keyword_type", strconv.Itoa(int(monitor.Keyword.Type)))
 			caseType := "1"
-			if monitor.Keyword.CaseSensitive {
+			if *monitor.Keyword.CaseSensitive {
 				caseType = "0"
 			}
 			form.Set("keyword_case_type", caseType)

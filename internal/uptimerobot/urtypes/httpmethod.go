@@ -1,6 +1,6 @@
 package urtypes
 
-//go:generate enumer -type HTTPMethod -json -trimprefix HTTP
+//go:generate enumer -type HTTPMethod -trimprefix HTTP -json -text
 
 //+kubebuilder:validation:Type:=string
 //+kubebuilder:validation:Enum:=HEAD;GET;POST;PUT;PATCH;DELETE;OPTIONS
