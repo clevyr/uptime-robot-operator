@@ -19,6 +19,7 @@ package controller
 import (
 	"context"
 	"net/url"
+	"strconv"
 	"strings"
 
 	uptimerobotv1 "github.com/clevyr/uptime-robot-operator/api/v1"
@@ -87,9 +88,17 @@ func (r *IngressReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return ctrl.Result{}, nil
 	}
 
-	annotationCount := r.countMatchingAnnotations(ingress)
+	annotations := r.getMatchingAnnotations(ingress)
+
+	var enabled bool
+	if val, ok := annotations["enabled"]; ok {
+		if enabled, err = strconv.ParseBool(val); err != nil {
+			return ctrl.Result{}, err
+		}
+	}
+
 	var create bool
-	if annotationCount == 0 {
+	if !enabled {
 		if controllerutil.ContainsFinalizer(ingress, myFinalizerName) {
 			// Delete existing Monitor
 			for _, monitor := range list.Items {
@@ -121,7 +130,6 @@ func (r *IngressReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		})
 	}
 
-	annotations := r.getMatchingAnnotations(ingress)
 	for _, monitor := range list.Items {
 		if err := r.updateValues(ingress, &monitor, annotations); err != nil {
 			return ctrl.Result{}, err
@@ -178,7 +186,12 @@ func (r *IngressReconciler) countMatchingAnnotations(ingress *networkingv1.Ingre
 }
 
 func (r *IngressReconciler) getMatchingAnnotations(ingress *networkingv1.Ingress) map[string]string {
-	annotations := make(map[string]string, r.countMatchingAnnotations(ingress))
+	count := r.countMatchingAnnotations(ingress)
+	if count == 0 {
+		return nil
+	}
+
+	annotations := make(map[string]string, count)
 	for k, v := range ingress.Annotations {
 		if strings.HasPrefix(k, IngressAnnotationPrefix) {
 			annotations[strings.TrimPrefix(k, IngressAnnotationPrefix)] = v
