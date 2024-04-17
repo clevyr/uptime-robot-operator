@@ -70,14 +70,14 @@ func (c Client) Do(ctx context.Context, endpoint string, form url.Values) (*http
 }
 
 func (c Client) MonitorValues(monitor uptimerobotv1.MonitorValues, form url.Values, contacts uptimerobotv1.MonitorContacts) url.Values {
-	form.Set("friendly_name", monitor.FriendlyName)
+	form.Set("friendly_name", monitor.Name)
 	form.Set("url", monitor.URL)
 	form.Set("type", strconv.Itoa(int(monitor.Type)))
 	form.Set("interval", strconv.Itoa(int(monitor.Interval.Seconds())))
 	form.Set("timeout", strconv.Itoa(int(monitor.Timeout.Seconds())))
 	form.Set("alert_contacts", contacts.String())
-	form.Set("http_method", strconv.Itoa(int(monitor.HTTPMethod)))
-	switch monitor.HTTPMethod {
+	form.Set("http_method", strconv.Itoa(int(monitor.Method)))
+	switch monitor.Method {
 	case urtypes.MethodHEAD, urtypes.MethodGET:
 	default:
 		if monitor.POST != nil {

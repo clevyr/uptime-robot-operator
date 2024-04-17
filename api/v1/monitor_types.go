@@ -79,8 +79,8 @@ type Monitor struct {
 //+kubebuilder:validation:XValidation:rule="self.type != 'Port' || has(self.port)", message="Port config is required if type is Port"
 
 type MonitorValues struct {
-	// FriendlyName sets the name that is shown in Uptime Robot.
-	FriendlyName string `json:"friendlyName"`
+	// Name sets the name that is shown in Uptime Robot.
+	Name string `json:"name"`
 
 	// URL is the URL or IP to monitor, including the scheme.
 	URL string `json:"url"`
@@ -101,9 +101,9 @@ type MonitorValues struct {
 	//+kubebuilder:default:="30s"
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 
-	// HTTPMethod defines the HTTP verb to use.
+	// Method defines the HTTP verb to use.
 	//+kubebuilder:default:="HEAD"
-	HTTPMethod urtypes.HTTPMethod `json:"httpMethod,omitempty"`
+	Method urtypes.HTTPMethod `json:"method,omitempty"`
 
 	// POST configures POST, PUT, PATCH, DELETE, and OPTIONS requests.
 	POST *MonitorPOST `json:"post,omitempty"`

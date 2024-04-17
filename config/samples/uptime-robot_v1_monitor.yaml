@@ -9,6 +9,6 @@ spec:
   interval: 24h
   prune: true
   monitor:
-    friendlyName: Example
+    name: Example
     url: https://example.com
     interval: 5m

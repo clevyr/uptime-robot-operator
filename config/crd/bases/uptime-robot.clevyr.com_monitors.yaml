@@ -119,22 +119,6 @@ spec:
                     required:
                     - type
                     type: object
-                  friendlyName:
-                    description: FriendlyName sets the name that is shown in Uptime
-                      Robot.
-                    type: string
-                  httpMethod:
-                    default: HEAD
-                    description: HTTPMethod defines the HTTP verb to use.
-                    enum:
-                    - HEAD
-                    - GET
-                    - POST
-                    - PUT
-                    - PATCH
-                    - DELETE
-                    - OPTIONS
-                    type: string
                   interval:
                     default: 60s
                     description: Interval is the monitoring interval.
@@ -157,6 +141,21 @@ spec:
                     - type
                     - value
                     type: object
+                  method:
+                    default: HEAD
+                    description: Method defines the HTTP verb to use.
+                    enum:
+                    - HEAD
+                    - GET
+                    - POST
+                    - PUT
+                    - PATCH
+                    - DELETE
+                    - OPTIONS
+                    type: string
+                  name:
+                    description: Name sets the name that is shown in Uptime Robot.
+                    type: string
                   port:
                     description: Port provides configuration for the Port monitor
                       type.
@@ -228,7 +227,7 @@ spec:
                     description: URL is the URL or IP to monitor, including the scheme.
                     type: string
                 required:
-                - friendlyName
+                - name
                 - url
                 type: object
                 x-kubernetes-validations:

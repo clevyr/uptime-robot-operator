@@ -201,7 +201,7 @@ func (r *IngressReconciler) getMatchingAnnotations(ingress *networkingv1.Ingress
 }
 
 func (r *IngressReconciler) updateValues(ingress *networkingv1.Ingress, monitor *uptimerobotv1.Monitor, annotations map[string]string) error {
-	monitor.Spec.Monitor.FriendlyName = ingress.Name
+	monitor.Spec.Monitor.Name = ingress.Name
 	if _, ok := annotations["monitor.url"]; !ok {
 		if len(ingress.Spec.Rules) != 0 {
 			var u url.URL
