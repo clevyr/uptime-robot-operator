@@ -18,6 +18,9 @@ issues:
         - lll
 
 linters-settings:
+  errcheck:
+    exclude-functions:
+      - fmt.Fprintf
   gocyclo:
     min-complexity: 35
 
