@@ -1,6 +1,6 @@
 module github.com/clevyr/uptime-robot-operator
 
-go 1.22.4
+go 1.22.5
 
 require (
 	github.com/knadh/koanf/maps v0.1.1
