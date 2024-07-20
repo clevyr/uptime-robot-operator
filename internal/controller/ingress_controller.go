@@ -224,12 +224,18 @@ func (r *IngressReconciler) updateValues(ingress *networkingv1.Ingress, monitor 
 			monitor.Spec.Monitor.URL = u.String()
 		}
 	}
+	delete(annotations, "enabled")
+	delete(annotations, "monitor.url")
+	delete(annotations, "monitor.scheme")
+	delete(annotations, "monitor.host")
+	delete(annotations, "monitor.path")
 
 	dec, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
 		DecodeHook: mapstructure.ComposeDecodeHookFunc(
 			util.DecodeHookMetav1Duration,
 			mapstructure.TextUnmarshallerHookFunc(),
 		),
+		ErrorUnused:      true,
 		TagName:          "json",
 		WeaklyTypedInput: true,
 		Result:           &monitor.Spec,
