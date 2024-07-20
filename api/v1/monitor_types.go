@@ -165,9 +165,9 @@ type MonitorPOST struct {
 
 // MonitorContactRef attaches alert contacts. If blank, the default will be used.
 type MonitorContactRef struct {
-	corev1.LocalObjectReference `json:",inline"`
+	corev1.LocalObjectReference `json:",inline" mapstructure:",squash"`
 
-	MonitorContactCommon `json:",inline"`
+	MonitorContactCommon `json:",inline" mapstructure:",squash"`
 }
 
 type MonitorContactCommon struct {

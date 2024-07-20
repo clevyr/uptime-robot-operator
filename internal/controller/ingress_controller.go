@@ -236,7 +236,6 @@ func (r *IngressReconciler) updateValues(ingress *networkingv1.Ingress, monitor 
 			mapstructure.TextUnmarshallerHookFunc(),
 		),
 		ErrorUnused:      true,
-		TagName:          "json",
 		WeaklyTypedInput: true,
 		Result:           &monitor.Spec,
 	})
