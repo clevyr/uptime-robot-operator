@@ -1,6 +1,6 @@
 package urtypes
 
-//go:generate enumer -type PortType -trimprefix Port -json -text
+//go:generate go run github.com/dmarkham/enumer -type PortType -trimprefix Port -json -text
 
 //+kubebuilder:validation:Type:=string
 //+kubebuilder:validation:Enum:=HTTP;FTP;SMTP;POP3;IMAP;Custom

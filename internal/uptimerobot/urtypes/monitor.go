@@ -5,7 +5,7 @@ const (
 	MonitorRunning
 )
 
-//go:generate enumer -type MonitorType -trimprefix Type -json -text
+//go:generate go run github.com/dmarkham/enumer -type MonitorType -trimprefix Type -json -text
 
 //+kubebuilder:validation:Type:=string
 //+kubebuilder:validation:Enum:=HTTPS;Keyword;Ping;Port;Heartbeat
@@ -20,7 +20,7 @@ const (
 	TypeHeartbeat
 )
 
-//go:generate enumer -type MonitorAuthType -trimprefix Auth -json -text
+//go:generate go run github.com/dmarkham/enumer -type MonitorAuthType -trimprefix Auth -json -text
 
 //+kubebuilder:validation:Type:=string
 //+kubebuilder:validation:Enum:=Basic;Digest

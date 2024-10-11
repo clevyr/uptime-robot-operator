@@ -1,6 +1,6 @@
 package urtypes
 
-//go:generate enumer -type POSTType -trimprefix Type -json -text
+//go:generate go run github.com/dmarkham/enumer -type POSTType -trimprefix Type -json -text
 
 //+kubebuilder:validation:Type:=string
 //+kubebuilder:validation:Enum:=KeyValue;RawData
@@ -12,7 +12,7 @@ const (
 	TypeRawData
 )
 
-//go:generate enumer -type POSTContentType -linecomment -json -text
+//go:generate go run github.com/dmarkham/enumer -type POSTContentType -linecomment -json -text
 
 //+kubebuilder:validation:Type:=string
 //+kubebuilder:validation:Enum:=text/html;application/json
