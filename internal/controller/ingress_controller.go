@@ -24,8 +24,8 @@ import (
 
 	uptimerobotv1 "github.com/clevyr/uptime-robot-operator/api/v1"
 	"github.com/clevyr/uptime-robot-operator/internal/util"
+	"github.com/go-viper/mapstructure/v2"
 	"github.com/knadh/koanf/maps"
-	"github.com/mitchellh/mapstructure"
 	corev1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
