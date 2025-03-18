@@ -1,5 +1,5 @@
 /*
-Copyright 2024.
+Copyright 2025.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,16 +21,16 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// AccountSpec defines the desired state of Account
+// AccountSpec defines the desired state of Account.
 type AccountSpec struct {
-	// +kubebuilder:default:=false
+	//+kubebuilder:default:=false
 	IsDefault bool `json:"isDefault,omitempty"`
 
 	// ApiKeySecretRef references the secret that contains the Uptime Robot API key.
 	ApiKeySecretRef corev1.SecretKeySelector `json:"apiKeySecretRef"`
 }
 
-// AccountStatus defines the observed state of Account
+// AccountStatus defines the observed state of Account.
 type AccountStatus struct {
 	Ready bool   `json:"ready"`
 	Email string `json:"email"`
@@ -44,7 +44,7 @@ type AccountStatus struct {
 //+kubebuilder:printcolumn:name="Email",type="string",JSONPath=".status.email"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
-// Account is the Schema for the accounts API
+// Account is the Schema for the accounts API.
 type Account struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -55,7 +55,7 @@ type Account struct {
 
 //+kubebuilder:object:root=true
 
-// AccountList contains a list of Account
+// AccountList contains a list of Account.
 type AccountList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`

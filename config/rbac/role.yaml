@@ -7,18 +7,18 @@ rules:
 - apiGroups:
   - ""
   resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - ""
+  resources:
   - secrets
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - ""
-  resources:
-  - events
-  verbs:
-  - create
-  - patch
 - apiGroups:
   - networking.k8s.io
   resources:
@@ -49,57 +49,7 @@ rules:
   - uptime-robot.clevyr.com
   resources:
   - accounts
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - uptime-robot.clevyr.com
-  resources:
-  - accounts/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - uptime-robot.clevyr.com
-  resources:
-  - accounts/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - uptime-robot.clevyr.com
-  resources:
   - contacts
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - uptime-robot.clevyr.com
-  resources:
-  - contacts/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - uptime-robot.clevyr.com
-  resources:
-  - contacts/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - uptime-robot.clevyr.com
-  resources:
   - monitors
   verbs:
   - create
@@ -112,12 +62,16 @@ rules:
 - apiGroups:
   - uptime-robot.clevyr.com
   resources:
+  - accounts/finalizers
+  - contacts/finalizers
   - monitors/finalizers
   verbs:
   - update
 - apiGroups:
   - uptime-robot.clevyr.com
   resources:
+  - accounts/status
+  - contacts/status
   - monitors/status
   verbs:
   - get
