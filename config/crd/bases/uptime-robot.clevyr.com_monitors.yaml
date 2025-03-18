@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: monitors.uptime-robot.clevyr.com
 spec:
   group: uptime-robot.clevyr.com
@@ -30,7 +30,7 @@ spec:
     name: v1
     schema:
       openAPIV3Schema:
-        description: Monitor is the Schema for the monitors API
+        description: Monitor is the Schema for the monitors API.
         properties:
           apiVersion:
             description: |-
@@ -50,17 +50,20 @@ spec:
           metadata:
             type: object
           spec:
-            description: MonitorSpec defines the desired state of Monitor
+            description: MonitorSpec defines the desired state of Monitor.
             properties:
               account:
                 description: Account references this object's Account. If not specified,
                   the default will be used.
                 properties:
                   name:
+                    default: ""
                     description: |-
                       Name of the referent.
+                      This field is effectively required, but due to backwards compatibility is
+                      allowed to be empty. Instances of this type with an empty value here are
+                      almost certainly wrong.
                       More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                      TODO: Add other useful fields. apiVersion, kind, uid?
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
@@ -72,10 +75,13 @@ spec:
                     the default will be used.
                   properties:
                     name:
+                      default: ""
                       description: |-
                         Name of the referent.
+                        This field is effectively required, but due to backwards compatibility is
+                        allowed to be empty. Instances of this type with an empty value here are
+                        almost certainly wrong.
                         More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                        TODO: Add other useful fields. apiVersion, kind, uid?
                       type: string
                     recurrence:
                       description: |-
@@ -264,7 +270,7 @@ spec:
             - monitor
             type: object
           status:
-            description: MonitorStatus defines the observed state of Monitor
+            description: MonitorStatus defines the observed state of Monitor.
             properties:
               id:
                 type: string

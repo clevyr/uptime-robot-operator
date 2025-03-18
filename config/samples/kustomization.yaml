@@ -3,4 +3,4 @@ resources:
 - uptime-robot_v1_monitor.yaml
 - uptime-robot_v1_contact.yaml
 - uptime-robot_v1_account.yaml
-#+kubebuilder:scaffold:manifestskustomizesamples
+# +kubebuilder:scaffold:manifestskustomizesamples

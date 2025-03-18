@@ -1,5 +1,5 @@
 /*
-Copyright 2024.
+Copyright 2025.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import (
 var _ = Describe("Contact Controller", func() {
 	Context("When reconciling a resource", func() {
 		const resourceName = "test-resource"
+
 		ctx := context.Background()
 		namespacedName := types.NamespacedName{Name: resourceName}
 		var (

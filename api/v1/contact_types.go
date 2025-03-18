@@ -1,5 +1,5 @@
 /*
-Copyright 2024.
+Copyright 2025.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// ContactSpec defines the desired state of Contact
+// ContactSpec defines the desired state of Contact.
 type ContactSpec struct {
-	// +kubebuilder:default:=false
+	//+kubebuilder:default:=false
 	IsDefault bool `json:"isDefault,omitempty"`
 
 	// Account references this object's Account. If not specified, the default will be used.
@@ -33,7 +33,7 @@ type ContactSpec struct {
 	Contact ContactValues `json:"contact"`
 }
 
-// ContactStatus defines the observed state of Contact
+// ContactStatus defines the observed state of Contact.
 type ContactStatus struct {
 	Ready bool   `json:"ready"`
 	ID    string `json:"id,omitempty"`
@@ -47,7 +47,7 @@ type ContactStatus struct {
 //+kubebuilder:printcolumn:name="Friendly Name",type="string",JSONPath=".spec.contact.name"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
-// Contact is the Schema for the contacts API
+// Contact is the Schema for the contacts API.
 type Contact struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -58,7 +58,7 @@ type Contact struct {
 
 //+kubebuilder:object:root=true
 
-// ContactList contains a list of Contact
+// ContactList contains a list of Contact.
 type ContactList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`

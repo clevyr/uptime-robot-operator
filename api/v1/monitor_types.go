@@ -1,5 +1,5 @@
 /*
-Copyright 2024.
+Copyright 2025.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// MonitorSpec defines the desired state of Monitor
+// MonitorSpec defines the desired state of Monitor.
 type MonitorSpec struct {
 	// Interval defines the reconcile interval.
 	//+kubebuilder:default:="24h"
@@ -42,14 +42,14 @@ type MonitorSpec struct {
 	// Monitor configures the Uptime Robot monitor.
 	Monitor MonitorValues `json:"monitor"`
 
-	// +kubebuilder:default:={{}}
+	//+kubebuilder:default:={{}}
 	Contacts []MonitorContactRef `json:"contacts,omitempty"`
 
 	// SourceRef optionally references the object that created this Monitor.
 	SourceRef *corev1.TypedLocalObjectReference `json:"sourceRef,omitempty"`
 }
 
-// MonitorStatus defines the observed state of Monitor
+// MonitorStatus defines the observed state of Monitor.
 type MonitorStatus struct {
 	Ready  bool                `json:"ready"`
 	ID     string              `json:"id,omitempty"`
@@ -65,7 +65,7 @@ type MonitorStatus struct {
 //+kubebuilder:printcolumn:name="URL",type="string",JSONPath=".spec.monitor.url"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
-// Monitor is the Schema for the monitors API
+// Monitor is the Schema for the monitors API.
 type Monitor struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -172,7 +172,7 @@ type MonitorContactRef struct {
 
 type MonitorContactCommon struct {
 	// Threshold defines the number of minutes to wait to notify.
-	// +kubebuilder:default:="1m"
+	//+kubebuilder:default:="1m"
 	Threshold metav1.Duration `json:"threshold,omitempty"`
 
 	// Recurrence defines the number of minutes between a repeat notification.
@@ -207,7 +207,7 @@ func (m MonitorContacts) String() string {
 
 //+kubebuilder:object:root=true
 
-// MonitorList contains a list of Monitor
+// MonitorList contains a list of Monitor.
 type MonitorList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
