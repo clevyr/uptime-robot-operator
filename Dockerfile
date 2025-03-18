@@ -16,7 +16,7 @@ COPY internal/ internal/
 
 ARG TARGETPLATFORM
 RUN --mount=type=cache,target=/root/.cache \
-  CGO_ENABLED=0 xx-go build -ldflags='-w -s' -trimpath -o manager cmd/main.go
+  CGO_ENABLED=0 xx-go build -ldflags='-w -s' -tags grpcnotrace -trimpath -o manager cmd/main.go
 
 
 FROM gcr.io/distroless/static:nonroot
