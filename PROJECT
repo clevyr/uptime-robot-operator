@@ -33,6 +33,7 @@ resources:
   group: uptime-robot
   kind: Account
   path: github.com/clevyr/uptime-robot-operator/api/v1
+  version: v1
 - controller: true
   domain: k8s.io
   group: networking
